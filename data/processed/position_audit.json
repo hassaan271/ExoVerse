@@ -1,0 +1,71 @@
+{
+  "columns_used": {
+    "ra": true,
+    "dec": true,
+    "glon": true,
+    "glat": true,
+    "sy_dist": true,
+    "sy_plx": true,
+    "pl_orbsmax": true,
+    "pl_orbeccen": true,
+    "pl_orbper": true,
+    "pl_orblper": true,
+    "pl_orbincl": true,
+    "pl_rade": true,
+    "pl_bmasse": true,
+    "st_teff": true,
+    "st_rad": true,
+    "st_mass": true,
+    "st_spectype": true
+  },
+  "default_rows": 6451,
+  "host_stars": 4847,
+  "systems_in_catalog": 4847,
+  "sky_coordinates": {
+    "missing_ra_dec": 0,
+    "missing_glon_glat": 0,
+    "ra_range": [
+      0.1856063,
+      359.9749837
+    ],
+    "dec_range": [
+      -89.4715133,
+      88.8298759
+    ],
+    "max_arcsec_between_radec_and_glonglat": 0.05,
+    "median_arcsec": 0.022,
+    "disagree_over_60_arcsec": 0
+  },
+  "distance": {
+    "systems_with_distance": 4741,
+    "systems_without_distance": 106,
+    "range_parsecs": [
+      1.30119,
+      8340
+    ],
+    "median_distance_times_parallax_should_be_1": 0.991,
+    "checked_against_parallax": 5926
+  },
+  "transform": {
+    "largest_gap_parsecs_between_ra_dec_and_glon_glat_paths": 0.0017,
+    "scene_axes_right_handed": true,
+    "galactic_centre_direction_l0_b0_scene": [
+      0,
+      20.8,
+      0
+    ]
+  },
+  "hosts": {
+    "hosts_with_conflicting_position_across_planets": 0,
+    "examples": [],
+    "distinct_hostnames_on_same_sky_position": 5
+  },
+  "orbits": {
+    "median_semi_major_axis_over_kepler_prediction": 1,
+    "checked_against_kepler": 2922,
+    "outside_factor_of_2": 1,
+    "eccentricity_over_0_7_previously_capped": 60,
+    "has_argument_of_periastron": 1748,
+    "has_inclination": 2103
+  }
+}

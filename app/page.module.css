@@ -1,0 +1,11 @@
+.stats {
+  display: grid;
+  gap: var(--space-4);
+  margin: var(--space-6) var(--gutter) 0;
+  padding: var(--space-5) clamp(1.25rem, 3vw, 2.25rem);
+}
+
+.source {
+  color: var(--soft);
+  font-size: var(--text-small);
+}

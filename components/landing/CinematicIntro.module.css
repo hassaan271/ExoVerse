@@ -1,0 +1,162 @@
+.page {
+  --landing-scroll: 0;
+  position: relative;
+}
+
+/* The scene stays behind the whole page, so glass panels have a sky to blur. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--black);
+}
+
+.still {
+  object-fit: cover;
+}
+
+/* Readability only: darkens the copy's side, then the sky as the page scrolls. */
+.veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to right,
+      rgba(5, 5, 5, 0.72) 0%,
+      rgba(5, 5, 5, 0.3) 42%,
+      transparent 68%
+    ),
+    rgba(5, 5, 5, calc(var(--landing-scroll) * 0.68));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.4s var(--ease-cinematic);
+}
+
+.page:not([data-phase="intro"]) .veil {
+  opacity: 1;
+}
+
+.stage {
+  position: relative;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+}
+
+/* The opening title. It yields to the hero's own wordmark. */
+.title {
+  position: absolute;
+  top: 17%;
+  right: 0;
+  left: 0;
+  color: var(--white);
+  font-size: clamp(1.75rem, 1.2rem + 2.6vw, 3.25rem);
+  font-weight: 400;
+  letter-spacing: 0.34em;
+  text-align: center;
+  text-indent: 0.34em;
+  opacity: 0;
+  animation: title-in 1.5s var(--ease-cinematic) 0.35s forwards;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.page:not([data-phase="intro"]) .title {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes title-in {
+  from {
+    opacity: 0;
+    letter-spacing: 0.6em;
+  }
+
+  to {
+    opacity: 1;
+    letter-spacing: 0.34em;
+  }
+}
+
+/* Appears only while the scene is genuinely still loading. */
+.progress {
+  position: absolute;
+  bottom: 4.5rem;
+  left: 50%;
+  width: 7rem;
+  height: 1px;
+  overflow: hidden;
+  background: var(--line);
+  transform: translateX(-50%);
+}
+
+.progress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: var(--silver);
+  animation: progress 1.3s ease-in-out infinite alternate;
+}
+
+@keyframes progress {
+  to {
+    transform: translateX(150%);
+  }
+}
+
+.skip {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 1.5rem;
+  z-index: 4;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: rgba(14, 14, 14, 0.45);
+  color: var(--soft);
+  font-size: var(--text-small);
+  cursor: pointer;
+  opacity: 0;
+  backdrop-filter: blur(14px);
+  animation: skip-in 0.5s ease 0.4s forwards;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.skip:hover {
+  border-color: var(--line-strong);
+  color: var(--white);
+}
+
+.skip:focus-visible {
+  opacity: 1;
+}
+
+@keyframes skip-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.after {
+  position: relative;
+}
+
+@media (max-width: 760px) {
+  .veil {
+    background:
+      linear-gradient(to top, rgba(5, 5, 5, 0.82) 0%, rgba(5, 5, 5, 0.3) 60%, transparent 100%),
+      rgba(5, 5, 5, calc(var(--landing-scroll) * 0.68));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title {
+    display: none;
+  }
+}

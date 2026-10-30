@@ -1,0 +1,208 @@
+:root {
+  color-scheme: dark;
+
+  /* Strictly monochrome. Colour on screen comes only from starlight and planets. */
+  --black: #050505;
+  --charcoal: #0f0f0f;
+  --graphite: #1c1c1c;
+  --graphite-light: #6e6e6e;
+  --silver: #c4c4c4;
+  --soft: #a6a6a6;
+  --white: #f4f4f4;
+  --glass: rgba(255, 255, 255, 0.07);
+  --line: rgba(255, 255, 255, 0.11);
+  --line-strong: rgba(255, 255, 255, 0.26);
+
+  --gutter: clamp(1rem, 4vw, 3.5rem);
+  --ease-cinematic: cubic-bezier(0.22, 0.61, 0.2, 1);
+
+  --radius-s: 0.5rem;
+  --radius-m: 0.875rem;
+  --radius-l: 1.25rem;
+  --radius-pill: 999px;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2.5rem;
+
+  --text-small: 0.875rem;
+  --text-body: 1rem;
+  --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --text-h3: 1.5rem;
+  --text-h2: clamp(1.75rem, 1.45rem + 1.4vw, 2.625rem);
+  --text-h1: clamp(2.5rem, 1.9rem + 3.4vw, 4.75rem);
+
+  --section-gap: clamp(4rem, 9vw, 7.5rem);
+
+  --header-height: 4rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--black);
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: -0.022em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 3px;
+}
+
+/* Shared controls. Every button in the product is one of these. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: none;
+  font-size: var(--text-body);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.button-primary {
+  background: var(--white);
+  color: var(--black);
+}
+
+.button-primary:hover {
+  background: var(--silver);
+}
+
+.button-secondary {
+  border-color: var(--line-strong);
+  background: rgba(14, 14, 14, 0.45);
+  backdrop-filter: blur(14px);
+}
+
+.button-secondary:hover {
+  border-color: var(--white);
+}
+
+.icon-button {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--soft);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.icon-button:hover {
+  background: var(--glass);
+  color: var(--white);
+}
+
+.glass {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  background: linear-gradient(160deg, rgba(38, 38, 38, 0.56), rgba(14, 14, 14, 0.62));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 50px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(22px);
+}
+
+.field {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  background: rgba(5, 5, 5, 0.45);
+  font-size: var(--text-body);
+  transition: border-color 0.2s ease;
+}
+
+.field:hover {
+  border-color: var(--line-strong);
+}
+
+.field::placeholder {
+  color: var(--soft);
+}
+
+.field option {
+  background: var(--charcoal);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}

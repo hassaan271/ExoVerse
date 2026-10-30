@@ -1,0 +1,41 @@
+.layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0.7rem 0 0 0.7rem;
+  padding: 0.05rem 0.4rem;
+  border: 0;
+  border-radius: var(--radius-s);
+  background: rgba(5, 5, 5, 0.5);
+  color: var(--soft);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  pointer-events: none;
+  will-change: transform;
+  transition: color 0.2s ease;
+}
+
+button.label {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.label:hover {
+  color: var(--white);
+}
+
+.label[data-selected] {
+  color: var(--white);
+  font-weight: 500;
+}
+
+.label[data-side="left"] {
+  translate: calc(-100% - 1.4rem) 0;
+}

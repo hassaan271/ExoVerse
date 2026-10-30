@@ -1,0 +1,25 @@
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5) var(--space-6);
+  margin: 0 var(--gutter) var(--section-gap);
+  padding: clamp(1.75rem, 4vw, 3rem);
+}
+
+.title {
+  font-size: var(--text-h2);
+}
+
+.text {
+  margin-top: var(--space-2);
+  color: var(--silver);
+  font-size: var(--text-lead);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}

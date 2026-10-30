@@ -1,0 +1,35 @@
+.facts {
+  margin: 0;
+}
+
+.fact {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.9375rem;
+}
+
+.fact dt {
+  flex: none;
+  color: var(--soft);
+}
+
+.fact dd {
+  margin: 0;
+  min-width: 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.fact dd[data-unknown] {
+  color: var(--soft);
+}
+
+.origin {
+  display: block;
+  color: var(--silver);
+  font-size: 0.8125rem;
+}

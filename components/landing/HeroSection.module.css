@@ -1,0 +1,76 @@
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  padding: 6rem var(--gutter) clamp(2.5rem, 8vh, 5rem);
+}
+
+.copy {
+  display: grid;
+  gap: clamp(1rem, 2.4vh, 1.5rem);
+  max-width: 42rem;
+  /* Written each frame by the scene, so copy and galaxy move as one. */
+  opacity: calc(1 - var(--landing-scroll) * 1.5);
+  transform: translateY(calc(var(--landing-scroll) * -56px));
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.9s var(--ease-cinematic) var(--delay, 0s),
+    transform 0.9s var(--ease-cinematic) var(--delay, 0s);
+}
+
+.hero:not([data-phase="intro"]) .reveal {
+  opacity: 1;
+  transform: none;
+}
+
+/* The wordmark is the first thing to appear, and its tracking closes up like
+   the galaxy did on the way in. */
+.brand {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.86em;
+  white-space: nowrap;
+  opacity: 0;
+  transition:
+    opacity 0.9s ease,
+    letter-spacing 1.7s var(--ease-cinematic);
+}
+
+.hero:not([data-phase="intro"]) .brand {
+  opacity: 1;
+  letter-spacing: 0.32em;
+}
+
+.heading {
+  font-size: var(--text-h1);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+}
+
+.lede {
+  max-width: 36rem;
+  color: var(--silver);
+  line-height: 1.6;
+  font-size: var(--text-lead);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .brand {
+    opacity: 1;
+    transform: none;
+    letter-spacing: 0.32em;
+  }
+}

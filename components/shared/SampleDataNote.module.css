@@ -1,0 +1,7 @@
+.note {
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--silver);
+  color: var(--soft);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}

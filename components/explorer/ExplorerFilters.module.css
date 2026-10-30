@@ -1,0 +1,73 @@
+.filters {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.search {
+  position: relative;
+  display: block;
+  color: var(--soft);
+}
+
+.search svg {
+  position: absolute;
+  top: 50%;
+  left: 0.8rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.search input {
+  padding-left: 2.4rem;
+  color: var(--white);
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--soft);
+  font-size: var(--text-small);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.chip:hover {
+  border-color: var(--line-strong);
+  color: var(--white);
+}
+
+.chip[aria-pressed="true"] {
+  border-color: var(--white);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--white);
+}
+
+.more summary {
+  color: var(--soft);
+  font-size: var(--text-small);
+  cursor: pointer;
+}
+
+.more summary:hover {
+  color: var(--white);
+}
+
+.select {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-3);
+  color: var(--soft);
+  font-size: var(--text-small);
+}
+
+.select select {
+  color: var(--white);
+}

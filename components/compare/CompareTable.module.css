@@ -1,0 +1,110 @@
+.wrap {
+  padding: var(--space-2) var(--space-5) var(--space-3);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.table th,
+.table td {
+  padding: 0.8rem var(--space-4) 0.8rem 0;
+  text-align: left;
+  vertical-align: top;
+}
+
+.table thead th {
+  color: var(--soft);
+  font-size: var(--text-small);
+  font-weight: 500;
+}
+
+.table tbody tr {
+  border-top: 1px solid var(--line);
+}
+
+.table tbody th {
+  color: var(--soft);
+  font-weight: 400;
+}
+
+.table td span {
+  display: block;
+}
+
+.table td [data-missing] {
+  color: var(--soft);
+}
+
+.note {
+  color: var(--soft);
+  font-size: var(--text-small);
+}
+
+.difference {
+  width: 38%;
+}
+
+/* Neutral bars: top for the first planet, bottom for the second. */
+.bars {
+  display: grid;
+  gap: 2px;
+  margin-top: var(--space-2);
+}
+
+.bars span {
+  height: 3px;
+  min-width: 2px;
+  border-radius: 2px;
+  background: var(--white);
+}
+
+.bars span + span {
+  background: var(--graphite-light);
+}
+
+@media (max-width: 760px) {
+  .wrap {
+    padding-inline: var(--space-4);
+  }
+
+  .table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table th,
+  .table td {
+    display: block;
+    width: auto;
+  }
+
+  .table tbody tr {
+    padding: var(--space-3) 0;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.2rem 0;
+  }
+
+  .table tbody th {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--soft);
+    font-size: var(--text-small);
+  }
+}

@@ -1,0 +1,665 @@
+{
+  "metadata": {
+    "source": "NASA Exoplanet Archive",
+    "source_url": "https://exoplanetarchive.ipac.caltech.edu/",
+    "source_table": "PS (Planetary Systems)",
+    "source_table_note": "The supplied file is the PS table, not PSCompPars. PS holds one row per publication, so each planet here uses its default_flag=1 row, and gaps are filled from other publications with provenance recorded.",
+    "source_file": "data/raw/nasa_exoplanets.csv",
+    "retrieved": "Fri Oct 30 12:09:54 2026",
+    "source_bytes": 50978452,
+    "total_records_processed": 40350,
+    "total_records_validated": 6451,
+    "records_with_missing_values": 4757,
+    "parsec_to_light_year": 3.26156
+  },
+  "source": {
+    "columns": 123,
+    "rows": 40350,
+    "malformed_rows": 0,
+    "default_rows": 6451,
+    "alternate_rows": 33899,
+    "exact_duplicate_row_groups": 24,
+    "exact_duplicate_rows_beyond_first": 58,
+    "exact_duplicate_rowids": [
+      [
+        "6589",
+        "6590",
+        "6592",
+        "6593",
+        "6594"
+      ],
+      [
+        "6633",
+        "6635",
+        "6636",
+        "6637",
+        "6638"
+      ],
+      [
+        "6830",
+        "6832"
+      ],
+      [
+        "35640",
+        "35641"
+      ],
+      [
+        "35649",
+        "35653"
+      ],
+      [
+        "35650",
+        "35652"
+      ],
+      [
+        "35684",
+        "35687"
+      ],
+      [
+        "35702",
+        "35703"
+      ],
+      [
+        "35708",
+        "35709"
+      ],
+      [
+        "35819",
+        "35823"
+      ],
+      [
+        "35821",
+        "35822"
+      ],
+      [
+        "35878",
+        "35880"
+      ],
+      [
+        "35881",
+        "35882",
+        "35884",
+        "35885"
+      ],
+      [
+        "35899",
+        "35904"
+      ],
+      [
+        "35918",
+        "35923",
+        "35924",
+        "35925",
+        "35926",
+        "35933"
+      ],
+      [
+        "35919",
+        "35920",
+        "35921",
+        "35922",
+        "35928",
+        "35929",
+        "35930",
+        "35931"
+      ],
+      [
+        "35968",
+        "35970",
+        "35973",
+        "35974",
+        "35975",
+        "35976",
+        "35977"
+      ],
+      [
+        "36030",
+        "36031"
+      ],
+      [
+        "36035",
+        "36036",
+        "36038"
+      ],
+      [
+        "36054",
+        "36056",
+        "36057",
+        "36058",
+        "36059"
+      ],
+      [
+        "36060",
+        "36061",
+        "36062",
+        "36064",
+        "36065"
+      ],
+      [
+        "36094",
+        "36096"
+      ],
+      [
+        "36097",
+        "36098",
+        "36100"
+      ],
+      [
+        "36152",
+        "36154",
+        "36155",
+        "36156",
+        "36157"
+      ]
+    ]
+  },
+  "imported": {
+    "planets": 6451,
+    "systems": 4847,
+    "single_planet_systems": 3778,
+    "multi_planet_systems": 1069,
+    "systems_where_catalog_count_differs_from_sy_pnum": [
+      [
+        "55 Cnc",
+        5,
+        7
+      ],
+      [
+        "55 Cnc B",
+        2,
+        7
+      ],
+      [
+        "Gl 725 A",
+        1,
+        2
+      ],
+      [
+        "Gl 725 B",
+        1,
+        2
+      ],
+      [
+        "HD 20781",
+        4,
+        5
+      ],
+      [
+        "HD 20782",
+        1,
+        5
+      ],
+      [
+        "HD 41004 A",
+        1,
+        2
+      ],
+      [
+        "HD 41004 B",
+        1,
+        2
+      ],
+      [
+        "HD 133131 A",
+        2,
+        3
+      ],
+      [
+        "HD 133131 B",
+        1,
+        3
+      ],
+      [
+        "TOI-2267 A",
+        2,
+        3
+      ],
+      [
+        "TOI-2267 B",
+        1,
+        3
+      ],
+      [
+        "WASP-94 A",
+        1,
+        2
+      ],
+      [
+        "WASP-94 B",
+        1,
+        2
+      ],
+      [
+        "XO-2 N",
+        1,
+        4
+      ],
+      [
+        "XO-2 S",
+        3,
+        4
+      ]
+    ],
+    "controversial_planets": 58,
+    "circumbinary_planets": 53,
+    "candidates_not_published_confirmed": 73
+  },
+  "missing": {
+    "blank_in_default_row": {
+      "radius": 1625,
+      "mass": 3263,
+      "density": 5188,
+      "equilibrium_temperature": 4676,
+      "orbital_period": 368,
+      "semi_major_axis": 2496,
+      "eccentricity": 3678,
+      "distance": 128,
+      "stellar_temperature": 773
+    },
+    "still_null_after_gap_fill": {
+      "radius": 1589,
+      "mass": 3065,
+      "density_reported_or_calculated": 4644,
+      "equilibrium_temperature": 1630,
+      "orbital_period": 354,
+      "semi_major_axis": 495,
+      "eccentricity": 1068,
+      "distance": 127,
+      "stellar_temperature": 499,
+      "both_radius_and_mass": 7
+    },
+    "values_filled_from_other_publications": {
+      "orbit.argument_of_periastron": 369,
+      "host_star.age": 1632,
+      "host_star.spectral_type": 631,
+      "orbit.period": 14,
+      "host_star.temperature": 274,
+      "host_star.radius": 193,
+      "host_star.luminosity": 3004,
+      "physical.radius": 36,
+      "climate.equilibrium_temperature": 3046,
+      "orbit.semi_major_axis": 2001,
+      "host_star.mass": 725,
+      "host_star.metallicity": 1111,
+      "orbit.inclination": 2748,
+      "climate.insolation": 3581,
+      "physical.density": 301,
+      "physical.mass": 198,
+      "orbit.eccentricity": 2610,
+      "location.distance": 1
+    }
+  },
+  "radius_consistency": {
+    "earth_radii_per_jupiter_radius": 11.209,
+    "both_fields": 4826,
+    "only_pl_rade": 0,
+    "only_pl_radj": 0,
+    "largest_relative_gap": 0.034676923076923015
+  },
+  "conversions": {
+    "distance_parsecs_to_light_years": 6324,
+    "density_calculated_from_radius_and_mass": 243
+  },
+  "outliers_kept": {
+    "density_over_30_g_cm3": [
+      [
+        "HD 21749 c",
+        31.93
+      ],
+      [
+        "K2-19 d",
+        31
+      ],
+      [
+        "K2-223 b",
+        31.427611
+      ],
+      [
+        "Kepler-24 d",
+        152
+      ],
+      [
+        "Kepler-32 f",
+        295
+      ],
+      [
+        "Kepler-37 b",
+        140
+      ],
+      [
+        "Kepler-42 c",
+        98
+      ],
+      [
+        "Kepler-58 e",
+        131
+      ],
+      [
+        "Kepler-80 f",
+        2331
+      ],
+      [
+        "Kepler-82 d",
+        220
+      ],
+      [
+        "Kepler-102 b",
+        62
+      ],
+      [
+        "Kepler-102 c",
+        52
+      ],
+      [
+        "Kepler-102 f",
+        37
+      ],
+      [
+        "Kepler-107 d",
+        67
+      ],
+      [
+        "Kepler-131 c",
+        77.7
+      ],
+      [
+        "Kepler-176 b",
+        179
+      ],
+      [
+        "Kepler-238 b",
+        526
+      ],
+      [
+        "Kepler-245 e",
+        902
+      ],
+      [
+        "Kepler-276 b",
+        73
+      ],
+      [
+        "Kepler-279 b",
+        165
+      ],
+      [
+        "Kepler-281 b",
+        46
+      ],
+      [
+        "Kepler-391 b",
+        380
+      ],
+      [
+        "Kepler-391 c",
+        400
+      ],
+      [
+        "Kepler-450 d",
+        77
+      ],
+      [
+        "KOI-2513.01",
+        2000
+      ],
+      [
+        "TIC 9344899 b",
+        44.1
+      ],
+      [
+        "TOI-4504 b",
+        44
+      ],
+      [
+        "TOI-5422 b",
+        65.8
+      ],
+      [
+        "TOI-6884 b",
+        41
+      ]
+    ],
+    "radius_over_30_earth": [
+      [
+        "DH Tau b",
+        30.2643
+      ],
+      [
+        "GQ Lup b",
+        33.6
+      ],
+      [
+        "HD 100546 b",
+        77.3421
+      ],
+      [
+        "V2376 Ori b",
+        87.20586985
+      ]
+    ],
+    "semi_major_axis_over_1000_au": [
+      [
+        "2MASS J0249-0557 c",
+        1950
+      ],
+      [
+        "2MASS J21252752-8138278 b",
+        7493
+      ],
+      [
+        "BD+60 1417 b",
+        1662
+      ],
+      [
+        "COCONUTS-2 b",
+        7506
+      ],
+      [
+        "GJ 900 b",
+        12000
+      ],
+      [
+        "GU Psc b",
+        2000
+      ],
+      [
+        "HIP 77900 b",
+        3319
+      ],
+      [
+        "Ross 458 c",
+        1100
+      ],
+      [
+        "UCAC3 113-933 b",
+        6100
+      ],
+      [
+        "UCAC4 328-061594 b",
+        19000
+      ],
+      [
+        "USco1556 b",
+        3500
+      ],
+      [
+        "USco1621 b",
+        2880
+      ],
+      [
+        "WD 0806-661 b",
+        2500
+      ]
+    ]
+  },
+  "problems": {
+    "planets_without_default": [],
+    "planets_with_several_defaults": [],
+    "id_collisions": [],
+    "unknown_html_entities": []
+  },
+  "column_descriptions": {
+    "pl_name": "Planet Name",
+    "hostname": "Host Name",
+    "pl_letter": "Planet Letter",
+    "hd_name": "HD ID",
+    "hip_name": "HIP ID",
+    "tic_id": "TIC ID",
+    "gaia_dr2_id": "Gaia DR2 ID",
+    "gaia_dr3_id": "Gaia DR3 ID",
+    "default_flag": "Default Parameter Set",
+    "sy_snum": "Number of Stars",
+    "sy_pnum": "Number of Planets",
+    "sy_mnum": "Number of Moons",
+    "cb_flag": "Circumbinary Flag",
+    "discoverymethod": "Discovery Method",
+    "disc_year": "Discovery Year",
+    "disc_refname": "Discovery Reference",
+    "disc_pubdate": "Discovery Publication Date",
+    "disc_locale": "Discovery Locale",
+    "disc_facility": "Discovery Facility",
+    "disc_telescope": "Discovery Telescope",
+    "disc_instrument": "Discovery Instrument",
+    "rv_flag": "Detected by Radial Velocity Variations",
+    "pul_flag": "Detected by Pulsar Timing Variations",
+    "ptv_flag": "Detected by Pulsation Timing Variations",
+    "tran_flag": "Detected by Transits",
+    "ast_flag": "Detected by Astrometric Variations",
+    "obm_flag": "Detected by Orbital Brightness Modulations",
+    "micro_flag": "Detected by Microlensing",
+    "etv_flag": "Detected by Eclipse Timing Variations",
+    "ima_flag": "Detected by Imaging",
+    "dkin_flag": "Detected by Disk Kinematics",
+    "soltype": "Solution Type",
+    "pl_controv_flag": "Controversial Flag",
+    "pl_refname": "Planetary Parameter Reference",
+    "pl_orbper": "Orbital Period [days]",
+    "pl_orbsmax": "Orbit Semi-Major Axis [au]",
+    "pl_rade": "Planet Radius [Earth Radius]",
+    "pl_radj": "Planet Radius [Jupiter Radius]",
+    "pl_masse": "Planet Mass [Earth Mass]",
+    "pl_massj": "Planet Mass [Jupiter Mass]",
+    "pl_msinie": "Planet Mass*sin(i) [Earth Mass]",
+    "pl_msinij": "Planet Mass*sin(i) [Jupiter Mass]",
+    "pl_cmasse": "Planet Mass*sin(i)/sin(i) [Earth Mass]",
+    "pl_cmassj": "Planet Mass*sin(i)/sin(i) [Jupiter Mass]",
+    "pl_bmasse": "Planet Mass or Mass*sin(i) [Earth Mass]",
+    "pl_bmassj": "Planet Mass or Mass*sin(i) [Jupiter Mass]",
+    "pl_bmassprov": "Planet Mass or Mass*sin(i) Provenance",
+    "pl_dens": "Planet Density [g/cm**3]",
+    "pl_orbeccen": "Eccentricity",
+    "pl_insol": "Insolation Flux [Earth Flux]",
+    "pl_eqt": "Equilibrium Temperature [K]",
+    "pl_orbincl": "Inclination [deg]",
+    "pl_tranmid": "Transit Midpoint [days]",
+    "pl_tsystemref": "Time Reference Frame and Standard",
+    "ttv_flag": "Data show Transit Timing Variations",
+    "pl_imppar": "Impact Parameter",
+    "pl_trandep": "Transit Depth [%]",
+    "pl_trandur": "Transit Duration [hours]",
+    "pl_ratdor": "Ratio of Semi-Major Axis to Stellar Radius",
+    "pl_ratror": "Ratio of Planet to Stellar Radius",
+    "pl_occdep": "Occultation Depth [%]",
+    "pl_orbtper": "Epoch of Periastron [days]",
+    "pl_orblper": "Argument of Periastron [deg]",
+    "pl_rvamp": "Radial Velocity Amplitude [m/s]",
+    "pl_projobliq": "Projected Obliquity [deg]",
+    "pl_trueobliq": "True Obliquity [deg]",
+    "st_refname": "Stellar Parameter Reference",
+    "st_spectype": "Spectral Type",
+    "st_teff": "Stellar Effective Temperature [K]",
+    "st_rad": "Stellar Radius [Solar Radius]",
+    "st_mass": "Stellar Mass [Solar mass]",
+    "st_met": "Stellar Metallicity [dex]",
+    "st_metratio": "Stellar Metallicity Ratio",
+    "st_lum": "Stellar Luminosity [log(Solar)]",
+    "st_logg": "Stellar Surface Gravity [log10(cm/s**2)]",
+    "st_age": "Stellar Age [Gyr]",
+    "st_dens": "Stellar Density [g/cm**3]",
+    "st_vsin": "Stellar Rotational Velocity [km/s]",
+    "st_rotp": "Stellar Rotational Period [days]",
+    "st_radv": "Systemic Radial Velocity [km/s]",
+    "sy_refname": "System Parameter Reference",
+    "rastr": "RA [sexagesimal]",
+    "ra": "RA [deg]",
+    "decstr": "Dec [sexagesimal]",
+    "dec": "Dec [deg]",
+    "glat": "Galactic Latitude [deg]",
+    "glon": "Galactic Longitude [deg]",
+    "elat": "Ecliptic Latitude [deg]",
+    "elon": "Ecliptic Longitude [deg]",
+    "sy_pm": "Total Proper Motion [mas/yr]",
+    "sy_pmra": "Proper Motion (RA) [mas/yr]",
+    "sy_pmdec": "Proper Motion (Dec) [mas/yr]",
+    "sy_dist": "Distance [pc]",
+    "sy_plx": "Parallax [mas]",
+    "sy_bmag": "B (Johnson) Magnitude",
+    "sy_vmag": "V (Johnson) Magnitude",
+    "sy_jmag": "J (2MASS) Magnitude",
+    "sy_hmag": "H (2MASS) Magnitude",
+    "sy_kmag": "Ks (2MASS) Magnitude",
+    "sy_umag": "u (Sloan) Magnitude",
+    "sy_gmag": "g (Sloan) Magnitude",
+    "sy_rmag": "r (Sloan) Magnitude",
+    "sy_imag": "i (Sloan) Magnitude",
+    "sy_zmag": "z (Sloan) Magnitude",
+    "sy_w1mag": "W1 (WISE) Magnitude",
+    "sy_w2mag": "W2 (WISE) Magnitude",
+    "sy_w3mag": "W3 (WISE) Magnitude",
+    "sy_w4mag": "W4 (WISE) Magnitude",
+    "sy_gaiamag": "Gaia Magnitude",
+    "sy_icmag": "I (Cousins) Magnitude",
+    "sy_tmag": "TESS Magnitude",
+    "sy_kepmag": "Kepler Magnitude",
+    "rowupdate": "Date of Last Update",
+    "pl_pubdate": "Planetary Parameter Reference Publication Date",
+    "releasedate": "Release Date",
+    "pl_nnotes": "Number of Notes",
+    "st_nphot": "Number of Photometry Time Series",
+    "st_nrvc": "Number of Radial Velocity Time Series",
+    "st_nspec": "Number of Stellar Spectra Measurements",
+    "pl_nespec": "Number of Eclipse Spectra",
+    "pl_ntranspec": "Number of Transmission Spectra",
+    "pl_ndispec": "Number of Direct Imaging Spectra"
+  },
+  "validation": {
+    "passed": true,
+    "failures": 0,
+    "first_failures": [],
+    "default_values_compared": 67350,
+    "blanks_kept_null": 16435,
+    "gap_fills_verified_against_source_rows": 12980,
+    "values_with_no_source": 0,
+    "planets_in_systems": 6451,
+    "target_systems": {
+      "TRAPPIST-1": [
+        "TRAPPIST-1 b",
+        "TRAPPIST-1 c",
+        "TRAPPIST-1 d",
+        "TRAPPIST-1 e",
+        "TRAPPIST-1 f",
+        "TRAPPIST-1 g",
+        "TRAPPIST-1 h"
+      ],
+      "Kepler-452": [
+        "Kepler-452 b"
+      ],
+      "Proxima Cen": [
+        "Proxima Cen d",
+        "Proxima Cen b"
+      ],
+      "TOI-789": [
+        "TOI-789 b",
+        "TOI-789 c",
+        "TOI-789 d"
+      ]
+    },
+    "example_planets_with_no_size_or_mass": [
+      "KIC 10001893 b",
+      "KIC 10001893 c",
+      "KIC 10001893 d",
+      "LkCa 15 b",
+      "LkCa 15 c"
+    ]
+  }
+}

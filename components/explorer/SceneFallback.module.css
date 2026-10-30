@@ -1,0 +1,15 @@
+.cover {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-5);
+  background: var(--black);
+}
+
+.message {
+  position: relative;
+  max-width: 30rem;
+  color: var(--soft);
+  text-align: center;
+}

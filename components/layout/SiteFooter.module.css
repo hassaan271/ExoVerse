@@ -1,0 +1,40 @@
+.footer {
+  display: grid;
+  grid-template-columns: auto minmax(0, 60ch) auto;
+  justify-content: space-between;
+  gap: 1.5rem clamp(2rem, 5vw, 5rem);
+  padding: 2.5rem var(--gutter);
+  border-top: 1px solid var(--line);
+  background: rgba(5, 5, 5, 0.6);
+  color: var(--soft);
+  font-size: 0.875rem;
+}
+
+.brand {
+  color: var(--white);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+}
+
+.attribution a {
+  text-underline-offset: 0.2em;
+}
+
+.links {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.links a {
+  text-decoration: none;
+}
+
+.links a:hover {
+  color: var(--white);
+}
+
+@media (max-width: 800px) {
+  .footer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

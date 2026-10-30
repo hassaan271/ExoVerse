@@ -1,0 +1,77 @@
+.picker {
+  position: relative;
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.label {
+  color: var(--soft);
+  font-size: var(--text-small);
+}
+
+.field {
+  position: relative;
+  color: var(--soft);
+}
+
+.field svg {
+  position: absolute;
+  top: 50%;
+  left: 0.8rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.field input {
+  padding-left: 2.4rem;
+  color: var(--white);
+}
+
+.field input::placeholder {
+  color: var(--white);
+}
+
+.field input:focus::placeholder {
+  color: var(--soft);
+}
+
+.list {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  z-index: 30;
+  margin: var(--space-1) 0 0;
+  padding: var(--space-1);
+  border-radius: var(--radius-m);
+  background: rgba(16, 16, 16, 0.94);
+  list-style: none;
+}
+
+.option {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-s);
+  font-size: var(--text-small);
+  cursor: pointer;
+}
+
+.option[aria-selected="true"] {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.host {
+  color: var(--soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.none {
+  padding: 0.5rem 0.625rem;
+  color: var(--soft);
+  font-size: var(--text-small);
+}

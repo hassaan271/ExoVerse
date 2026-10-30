@@ -1,0 +1,29 @@
+.number {
+  --digit-height: 1.3em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Digits, punctuation and units all share one line height from the top edge.
+   Baseline alignment would drop punctuation, because a clipped digit box has
+   its baseline at the bottom, turning decimal points into apparent commas. */
+.roll {
+  display: inline-flex;
+  align-items: flex-start;
+  height: var(--digit-height);
+  line-height: var(--digit-height);
+  white-space: pre;
+}
+
+/* Shows one line of the strip. */
+.digit {
+  display: block;
+  height: var(--digit-height);
+  overflow: hidden;
+}
+
+.strip {
+  display: block;
+  white-space: pre;
+  will-change: transform;
+}

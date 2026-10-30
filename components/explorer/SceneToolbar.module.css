@@ -1,0 +1,30 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: 100%;
+  padding: 0.125rem 0.25rem 0.125rem 0.5rem;
+  border-radius: var(--radius-l);
+}
+
+.hint {
+  min-width: 0;
+  color: var(--soft);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.buttons {
+  display: flex;
+  flex: none;
+}
+
+@media (max-width: 760px) {
+  .hint {
+    display: none;
+  }
+
+  .toolbar {
+    padding-inline: 0.125rem;
+  }
+}

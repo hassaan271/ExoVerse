@@ -1,0 +1,61 @@
+.viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--black);
+}
+
+.toolbar {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  left: var(--space-4);
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.toolbar > * {
+  pointer-events: auto;
+}
+
+.modes {
+  display: flex;
+  flex: none;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.modes button {
+  padding: 0.3rem 0.8rem;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--soft);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.modes button[aria-pressed="true"] {
+  background: var(--white);
+  color: var(--black);
+}
+
+/* Stays between the side panels, so the scale note is never covered. */
+@media (min-width: 1101px) {
+  .toolbar {
+    right: calc(20rem + var(--space-4) * 2);
+    left: calc(20rem + var(--space-4) * 2);
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 761px) {
+  .toolbar {
+    right: calc(17rem + var(--space-4) * 2);
+    left: calc(17rem + var(--space-4) * 2);
+  }
+}

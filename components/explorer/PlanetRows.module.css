@@ -1,0 +1,50 @@
+.rows {
+  display: grid;
+  gap: 2px;
+  margin: 0 calc(var(--space-2) * -1);
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 0.3rem var(--space-2);
+  border: 0;
+  border-radius: var(--radius-m);
+  background: none;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.row:hover {
+  background: var(--glass);
+}
+
+button.row[aria-pressed="true"] {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.portrait {
+  flex: none;
+  width: 2.75rem;
+}
+
+.text {
+  display: grid;
+  min-width: 0;
+}
+
+.name {
+  font-size: var(--text-body);
+  overflow-wrap: anywhere;
+}
+
+.category {
+  color: var(--soft);
+  font-size: var(--text-small);
+}

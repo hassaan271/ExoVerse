@@ -1,0 +1,28 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+.main {
+  flex: 1;
+  padding: clamp(3rem, 9vw, 7rem) var(--gutter);
+}
+
+.title {
+  font-size: clamp(2.5rem, 2rem + 3vw, 4.5rem);
+}
+
+.body {
+  display: grid;
+  gap: 1rem;
+  max-width: 38rem;
+  margin-top: 1.5rem;
+  color: var(--soft);
+  font-size: 1.0625rem;
+}
+
+.body a {
+  color: var(--white);
+  text-underline-offset: 0.2em;
+}
