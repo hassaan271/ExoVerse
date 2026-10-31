@@ -109,7 +109,41 @@ check(index.systems.length === systems.length, "browser index is missing systems
 const stats = load("data/processed/catalog_stats.json");
 check(stats.planets === names.size, "stats planet count mismatch");
 check(stats.systems === new Set(records.map((r) => r.hostname)).size, "stats system count mismatch");
-check(stats.confirmed === defaults.filter((r) => r.soltype === "Published Confirmed").length, "stats confirmed mismatch");
+const confirmedNames = new Set(
+  records.filter((r) => r.soltype === "Published Confirmed").map((r) => r.pl_name),
+);
+check(stats.confirmed === confirmedNames.size, "stats confirmed mismatch");
+
+// A published limit must never stand in for a measurement.
+const LIMIT_COLUMNS = {
+  "physical.radius": "pl_radelim", "physical.mass": "pl_bmasselim", "physical.density": "pl_denslim",
+  "climate.equilibrium_temperature": "pl_eqtlim", "climate.insolation": "pl_insollim",
+  "orbit.period": "pl_orbperlim", "orbit.semi_major_axis": "pl_orbsmaxlim",
+  "orbit.eccentricity": "pl_orbeccenlim", "host_star.temperature": "st_tefflim",
+  "host_star.radius": "st_radlim", "host_star.mass": "st_masslim", "host_star.luminosity": "st_lumlim",
+};
+for (const planet of planets) {
+  for (const [path, fill] of Object.entries(planet.provenance.gap_filled)) {
+    const flag = rowById.get(String(fill.rowid))?.[LIMIT_COLUMNS[path]];
+    check(!flag || flag === "0", `${planet.pl_name} ${path} was filled from a limit`);
+  }
+}
+
+// Observatory counts, recounted from the raw rows.
+const observatoryData = load("public/data/observatories.json");
+for (const item of [...observatoryData.observatories, ...observatoryData.ground]) {
+  const names = item.facilities ?? [item.facility];
+  const rows = defaults.filter((row) => names.includes(row.disc_facility));
+  check(item.discoveries.planets === rows.length, `${item.id} planet count mismatch`);
+  check(
+    item.discoveries.systemCount === new Set(rows.map((row) => row.hostname)).size,
+    `${item.id} system count mismatch`,
+  );
+}
+const attributed = [...observatoryData.observatories, ...observatoryData.ground]
+  .reduce((sum, item) => sum + item.discoveries.planets, 0);
+const rest = observatoryData.unattributed.reduce((sum, row) => sum + row.planets, 0);
+check(attributed + rest === defaults.length, "observatories and other facilities don't sum to the catalog");
 
 const TARGETS = ["TRAPPIST-1", "Kepler-452", "Proxima Cen", "TOI-789"];
 const targets = Object.fromEntries(

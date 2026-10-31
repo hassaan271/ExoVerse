@@ -1,4 +1,5 @@
 import { formatValue, UNKNOWN } from "@/lib/format";
+import { radiusFromMass } from "@/lib/planetScale";
 import { hasMetricBit, type MetricPath } from "@/lib/planetSummary";
 import type { PlanetSummary } from "@/types/planet";
 
@@ -131,32 +132,57 @@ function differenceOf(
   return { absolute, shareA, shareB, sentence };
 }
 
+export type SizeBasis = "measured" | "estimated" | "unknown";
+
 export interface CompareSizes {
-  /** Radius in Earth radii, or null when NASA has none. */
+  /** Radius in Earth radii, or null when neither radius nor mass can give one. */
   a: number | null;
   b: number | null;
-  /** True only when both planets have a real radius. */
+  basisA: SizeBasis;
+  basisB: SizeBasis;
+  /** True when both planets have a size, measured or estimated. */
   toScale: boolean;
 }
 
-/** True radii, untouched. The scene applies one shared scale to both. */
+/** A measured radius if NASA has one, otherwise an estimate from a usable mass. */
+function sizeOf(planet: PlanetSummary): { radius: number | null; basis: SizeBasis } {
+  if (planet.radiusEarth !== null) return { radius: planet.radiusEarth, basis: "measured" };
+  if (planet.massEarth === null || hasMetricBit(planet.limitMask, "physical.mass")) {
+    return { radius: null, basis: "unknown" };
+  }
+  return { radius: radiusFromMass(planet.massEarth), basis: "estimated" };
+}
+
+/** True sizes, untouched. The scene applies one shared scale to both. */
 export function compareSizes(a: PlanetSummary, b: PlanetSummary): CompareSizes {
+  const left = sizeOf(a);
+  const right = sizeOf(b);
   return {
-    a: a.radiusEarth,
-    b: b.radiusEarth,
-    toScale: a.radiusEarth !== null && b.radiusEarth !== null,
+    a: left.radius,
+    b: right.radius,
+    basisA: left.basis,
+    basisB: right.basis,
+    toScale: left.radius !== null && right.radius !== null,
   };
 }
 
 /** The label under a planet in the 3D comparison. */
 export function radiusLabel(planet: PlanetSummary) {
-  if (planet.radiusEarth === null) {
-    return { size: "Radius unavailable", detail: "No physical size to draw" };
+  const { radius, basis } = sizeOf(planet);
+  if (radius === null) {
+    return { size: "Size unknown", detail: "Illustrative size, not to scale" };
+  }
+  const text = radius.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (basis === "estimated") {
+    return {
+      size: `About ${text} × Earth radius`,
+      detail: `Estimated from ${planet.massIsMinimum ? "minimum mass" : "mass"}`,
+    };
   }
   const jupiter = planet.radiusJupiter;
   return {
-    size: `${planet.radiusEarth.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} × Earth radius`,
-    detail: `${formatValue(planet.radiusEarth, "R⊕")}${
+    size: `${text} × Earth radius`,
+    detail: `${formatValue(radius, "R⊕")}${
       jupiter === null ? "" : `, ${jupiter.toLocaleString("en-US", { maximumFractionDigits: 3 })} RJ`
     }`,
   };
@@ -200,6 +226,30 @@ export function comparePlanets(a: PlanetSummary, b: PlanetSummary): ComparisonRo
     reason: null,
   });
   return rows;
+}
+
+/** The sentence under the 3D comparison. It always says what is not measured. */
+export function scaleNote(a: PlanetSummary, b: PlanetSummary, sizes: CompareSizes) {
+  const named = (basis: SizeBasis) =>
+    [sizes.basisA === basis ? a.name : null, sizes.basisB === basis ? b.name : null]
+      .filter(Boolean)
+      .join(" and ");
+
+  if (!sizes.toScale) {
+    return `NASA lists no radius or usable mass for ${named("unknown")}, so it is drawn at an illustrative size, not to scale.`;
+  }
+
+  const estimated = named("estimated");
+  const ratio = Math.max(sizes.a!, sizes.b!) / Math.min(sizes.a!, sizes.b!);
+  const larger = sizes.a! >= sizes.b! ? a : b;
+  const times = ratio.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  const comparison =
+    ratio > 1
+      ? `Same physical scale. ${larger.name} has ${estimated ? "about " : ""}${times} times the radius.`
+      : "Same physical scale. Both have the same radius.";
+  return estimated
+    ? `${comparison} NASA lists no radius for ${estimated}, so its size is estimated from mass.`
+    : comparison;
 }
 
 /**

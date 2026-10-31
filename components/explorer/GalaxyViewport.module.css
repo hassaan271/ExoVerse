@@ -37,12 +37,13 @@
   font-size: 0.8125rem;
   white-space: nowrap;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background var(--dur-1) var(--ease-cinematic), color var(--dur-1) var(--ease-cinematic);
 }
 
 .modes button[aria-pressed="true"] {
-  background: var(--white);
-  color: var(--black);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  color: var(--white);
 }
 
 /* Stays between the side panels, so the scale note is never covered. */

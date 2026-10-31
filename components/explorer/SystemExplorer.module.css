@@ -1,6 +1,7 @@
 .shell {
   position: relative;
-  height: calc(100svh - var(--header-height));
+  height: 100svh;
+  margin-top: calc(-1 * var(--header-height));
   min-height: 34rem;
   overflow: hidden;
 }
@@ -29,12 +30,12 @@
 .bodies,
 .preview {
   position: absolute;
-  top: var(--space-4);
+  top: var(--panel-top);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
   width: 20rem;
-  max-height: calc(100% - var(--space-4) * 2);
+  max-height: calc(100% - var(--panel-top) - var(--space-4));
   padding: var(--space-4);
   overflow-y: auto;
 }
@@ -81,7 +82,7 @@
 }
 
 .listTitle {
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--type-text);
   font-weight: 400;
 }
 
@@ -119,10 +120,7 @@
     position: static;
     width: auto;
     max-height: none;
-    border: 0;
-    border-radius: 0;
-    background: none;
-    backdrop-filter: none;
+    margin: var(--space-3);
     overflow: visible;
   }
 

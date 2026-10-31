@@ -1,4 +1,6 @@
 .section {
+  --visible: 3.4;
+  --gap: var(--space-4);
   padding: var(--section-gap) var(--gutter);
 }
 
@@ -8,7 +10,7 @@
   align-items: end;
   justify-content: space-between;
   gap: var(--space-4) var(--space-6);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-5);
 }
 
 .title {
@@ -21,31 +23,70 @@
   font-size: var(--text-small);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--space-4);
+/* Part of the next card always shows, so it's plain there's more to the side.
+   Vertical padding leaves room for the hover lift inside the clipped scroller. */
+.track {
+  display: flex;
+  gap: var(--gap);
   margin: 0;
-  padding: 0;
+  padding: var(--space-2) 2px var(--space-3);
+  overflow-x: auto;
   list-style: none;
+  cursor: grab;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 2px;
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.track:focus-visible {
+  outline: 1px solid var(--line-strong);
+  outline-offset: 2px;
+  border-radius: var(--radius-l);
+}
+
+/* Snapping would fight a mouse drag. */
+.track[data-dragging] {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
+.track[data-dragging] .link {
+  pointer-events: none;
 }
 
 .card {
   position: relative;
   display: flex;
+  flex: 0 0 calc((100% - var(--gap) * (var(--visible) - 1)) / var(--visible));
   flex-direction: column;
-  overflow: hidden;
+  overflow: clip;
+  overflow-clip-margin: 1px;
   padding-top: var(--space-5);
-  transition: border-color 0.25s ease;
+  scroll-snap-align: start;
+  transition:
+    transform var(--dur-2) var(--ease-cinematic),
+    border-color var(--dur-1) var(--ease-cinematic);
 }
 
-.card:hover {
+.card:hover,
+.card:focus-within {
   border-color: var(--line-strong);
+  transform: translateY(-3px);
 }
 
 .portrait {
-  width: min(82%, 15rem);
+  width: min(78%, 14rem);
   margin-inline: auto;
+  transition: transform var(--dur-3) var(--ease-cinematic);
+}
+
+.card:hover .portrait {
+  transform: scale(1.03);
 }
 
 .body {
@@ -53,27 +94,58 @@
   flex: 1;
   flex-direction: column;
   align-items: flex-start;
-  padding: var(--space-4) var(--space-5) var(--space-5);
+  padding: var(--space-4) var(--space-5) var(--space-4);
 }
 
 .name {
-  font-size: 1.375rem;
+  font-size: 1.875rem;
+  overflow-wrap: anywhere;
 }
 
 .meta {
   margin-top: var(--space-1);
-  color: var(--white);
+  color: var(--silver);
   font-size: var(--text-small);
 }
 
-.summary {
-  flex: 1;
-  margin-top: var(--space-3);
+.category {
+  margin-top: var(--space-1);
   color: var(--soft);
+  font-size: var(--text-small);
+}
+
+.stats {
+  display: grid;
+  flex: 1;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  gap: var(--space-3);
+  width: 100%;
+  margin: var(--space-3) 0 0;
+}
+
+.stats dt {
+  color: var(--soft);
+  font-size: var(--text-small);
+}
+
+.stats dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   margin-top: var(--space-4);
+  font-size: var(--text-small);
+  text-decoration: none;
+  transition: gap var(--dur-1) var(--ease-cinematic);
+}
+
+.card:hover .link {
+  gap: var(--space-2);
 }
 
 /* Stretches the click target across the whole card. */
@@ -83,14 +155,79 @@
   inset: 0;
 }
 
+.link:focus-visible {
+  outline: none;
+}
+
+.link:focus-visible::after {
+  outline: 2px solid var(--white);
+  outline-offset: -2px;
+  border-radius: var(--radius-l);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.progress {
+  flex: 1;
+  height: 2px;
+  margin-right: var(--space-3);
+  overflow: hidden;
+  border-radius: 1px;
+  background: var(--line);
+}
+
+.progressBar {
+  display: block;
+  height: 100%;
+  background: var(--silver);
+}
+
+.controls button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.more {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  text-align: center;
+}
+
+.moreNote {
+  color: var(--soft);
+  font-size: var(--text-small);
+}
+
 @media (max-width: 1100px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .section {
+    --visible: 2.3;
   }
 }
 
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: minmax(0, 1fr);
+@media (max-width: 640px) {
+  .section {
+    --visible: 1.15;
+    --gap: var(--space-3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .portrait,
+  .link {
+    transition: none;
+  }
+
+  .card:hover,
+  .card:focus-within,
+  .card:hover .portrait {
+    transform: none;
   }
 }

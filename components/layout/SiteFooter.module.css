@@ -5,15 +5,18 @@
   gap: 1.5rem clamp(2rem, 5vw, 5rem);
   padding: 2.5rem var(--gutter);
   border-top: 1px solid var(--line);
-  background: rgba(5, 5, 5, 0.6);
+  background: rgba(0, 0, 0, 0.6);
   color: var(--soft);
   font-size: 0.875rem;
 }
 
 .brand {
   color: var(--white);
-  font-weight: 500;
-  letter-spacing: 0.3em;
+  font-family: var(--type-display);
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  font-size: 1.5rem;
+  line-height: 1;
 }
 
 .attribution a {

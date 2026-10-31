@@ -71,29 +71,35 @@ function reference(raw) {
   return { text: decodeEntities(label), url };
 }
 
+/** NASA's two-sided uncertainty, kept with its signs. Null when it gives none. */
+const uncertainty = (row, upper, lower) => {
+  const [high, low] = [number(row[upper]), number(row[lower])];
+  return high === null && low === null ? null : { upper: high, lower: low };
+};
+
 const limitOf = (raw) =>
   raw === "1" ? "upper" : raw === "-1" ? "lower" : null;
 
 // Groups of columns that must always travel together from a single row.
 const GAP_FILL_GROUPS = [
-  { path: "physical.radius", columns: ["pl_rade", "pl_radj"], limit: "pl_radelim" },
-  { path: "physical.mass", columns: ["pl_bmasse", "pl_bmassj", "pl_bmassprov"], limit: "pl_bmasselim" },
+  { path: "physical.radius", columns: ["pl_rade", "pl_radj", "pl_radeerr1", "pl_radeerr2"], limit: "pl_radelim" },
+  { path: "physical.mass", columns: ["pl_bmasse", "pl_bmassj", "pl_bmassprov", "pl_bmasseerr1", "pl_bmasseerr2"], limit: "pl_bmasselim" },
   { path: "physical.density", columns: ["pl_dens"], limit: "pl_denslim" },
-  { path: "climate.equilibrium_temperature", columns: ["pl_eqt"], limit: "pl_eqtlim" },
-  { path: "climate.insolation", columns: ["pl_insol"], limit: "pl_insollim" },
+  { path: "climate.equilibrium_temperature", columns: ["pl_eqt", "pl_eqterr1", "pl_eqterr2"], limit: "pl_eqtlim" },
+  { path: "climate.insolation", columns: ["pl_insol", "pl_insolerr1", "pl_insolerr2"], limit: "pl_insollim" },
   { path: "orbit.period", columns: ["pl_orbper"], limit: "pl_orbperlim" },
-  { path: "orbit.semi_major_axis", columns: ["pl_orbsmax"], limit: "pl_orbsmaxlim" },
-  { path: "orbit.eccentricity", columns: ["pl_orbeccen"], limit: "pl_orbeccenlim" },
+  { path: "orbit.semi_major_axis", columns: ["pl_orbsmax", "pl_orbsmaxerr1", "pl_orbsmaxerr2"], limit: "pl_orbsmaxlim" },
+  { path: "orbit.eccentricity", columns: ["pl_orbeccen", "pl_orbeccenerr1", "pl_orbeccenerr2"], limit: "pl_orbeccenlim" },
   { path: "orbit.inclination", columns: ["pl_orbincl"], limit: "pl_orbincllim" },
   { path: "orbit.argument_of_periastron", columns: ["pl_orblper"], limit: "pl_orblperlim" },
-  { path: "host_star.temperature", columns: ["st_teff"], limit: "st_tefflim" },
+  { path: "host_star.temperature", columns: ["st_teff", "st_tefferr1", "st_tefferr2"], limit: "st_tefflim" },
   { path: "host_star.radius", columns: ["st_rad"], limit: "st_radlim" },
   { path: "host_star.mass", columns: ["st_mass"], limit: "st_masslim" },
   { path: "host_star.metallicity", columns: ["st_met", "st_metratio"], limit: "st_metlim" },
-  { path: "host_star.luminosity", columns: ["st_lum"], limit: "st_lumlim" },
+  { path: "host_star.luminosity", columns: ["st_lum", "st_lumerr1", "st_lumerr2"], limit: "st_lumlim" },
   { path: "host_star.age", columns: ["st_age"], limit: "st_agelim" },
   { path: "host_star.spectral_type", columns: ["st_spectype"] },
-  { path: "location.distance", columns: ["sy_dist"] },
+  { path: "location.distance", columns: ["sy_dist", "sy_disterr1", "sy_disterr2"] },
 ];
 
 /** Size class is ExoVerse's own label, derived from radius, or mass if no radius. */
@@ -143,6 +149,21 @@ const stableId = (name) => {
 
 const planets = [];
 const gapFillCounts = {};
+const rejectedDonors = [];
+
+/**
+ * A blank default axis must not be filled from a row that contradicts the
+ * planet's own period, as a misassigned value would. A factor of two leaves room
+ * for any real measurement. With no period or star mass there is nothing to test.
+ */
+function keplerAgrees(row, planet) {
+  const days = number(row.pl_orbper) ?? number(planet.pl_orbper);
+  const mass = number(row.st_mass) ?? number(planet.st_mass);
+  if (days === null || mass === null) return true;
+  const expected = Math.cbrt(mass * (days / 365.25) ** 2);
+  const ratio = number(row.pl_orbsmax) / expected;
+  return ratio > 0.5 && ratio < 2;
+}
 
 for (const [name, rows] of byPlanet) {
   const defaults = rows.filter((row) => row.default_flag === "1");
@@ -165,9 +186,12 @@ for (const [name, rows] of byPlanet) {
       if (limit) limits[group.path] = limit;
       continue;
     }
-    const donor = alternates.find(
-      (row) => row[lead] !== "" && (!group.limit || !limitOf(row[group.limit])),
-    );
+    const donor = alternates.find((row) => {
+      if (row[lead] === "" || (group.limit && limitOf(row[group.limit]))) return false;
+      if (group.path !== "orbit.semi_major_axis" || keplerAgrees(row, merged)) return true;
+      rejectedDonors.push([name, Number(row.rowid), number(row.pl_orbsmax)]);
+      return false;
+    });
     if (!donor) continue;
     for (const column of group.columns) merged[column] = donor[column];
     gapFilled[group.path] = {
@@ -185,9 +209,11 @@ for (const [name, rows] of byPlanet) {
   const mass = number(merged.pl_bmasse);
   const massProvenance = text(merged.pl_bmassprov);
   const reportedDensity = number(merged.pl_dens);
-  // Only a true mass gives a density. Msini is a lower limit.
+  // Only a true mass gives a density. Msini is a lower limit, and a published
+  // limit on either value would give a limit, not a density.
   const calculatedDensity =
-    reportedDensity === null && radius && mass && massProvenance === "Mass"
+    reportedDensity === null && radius && mass && massProvenance === "Mass" &&
+    !limits["physical.mass"] && !limits["physical.radius"]
       ? round((mass / radius ** 3) * 5.513, 3)
       : null;
   const parsecs = number(merged.sy_dist);
@@ -254,8 +280,26 @@ for (const [name, rows] of byPlanet) {
       locale: text(primary.disc_locale),
       reference: reference(primary.disc_refname),
     },
+    uncertainties: {
+      radius_earth: uncertainty(merged, "pl_radeerr1", "pl_radeerr2"),
+      mass_earth: uncertainty(merged, "pl_bmasseerr1", "pl_bmasseerr2"),
+      equilibrium_temperature: uncertainty(merged, "pl_eqterr1", "pl_eqterr2"),
+      insolation: uncertainty(merged, "pl_insolerr1", "pl_insolerr2"),
+      semi_major_axis: uncertainty(merged, "pl_orbsmaxerr1", "pl_orbsmaxerr2"),
+      eccentricity: uncertainty(merged, "pl_orbeccenerr1", "pl_orbeccenerr2"),
+      star_temperature: uncertainty(merged, "st_tefferr1", "st_tefferr2"),
+      star_luminosity: uncertainty(merged, "st_lumerr1", "st_lumerr2"),
+      distance_parsecs: uncertainty(merged, "sy_disterr1", "sy_disterr2"),
+    },
+    atmosphere: {
+      transmission_spectra: number(primary.pl_ntranspec) ?? 0,
+      eclipse_spectra: number(primary.pl_nespec) ?? 0,
+      direct_imaging_spectra: number(primary.pl_ndispec) ?? 0,
+    },
     status: {
       solution_type: text(primary.soltype),
+      // soltype describes one row. A planet is confirmed if any row confirms it.
+      confirmed: rows.some((row) => row.soltype === "Published Confirmed"),
       controversial: primary.pl_controv_flag === "1",
       circumbinary: primary.cb_flag === "1",
     },
@@ -307,6 +351,7 @@ const systems = [...systemGroups.entries()].map(([id, members]) => {
       (b.orbit.semi_major_axis_au ?? b.orbit.period_days ?? Infinity),
   );
   const pick = (read) => mostCommon(members.map(read));
+  const luminosity = pick((planet) => planet.host_star.luminosity_log_solar);
   return {
     id,
     hostname: members[0].hostname,
@@ -329,6 +374,10 @@ const systems = [...systemGroups.entries()].map(([id, members]) => {
       radius_solar: pick((planet) => planet.host_star.radius_solar),
       mass_solar: pick((planet) => planet.host_star.mass_solar),
       spectral_type: pick((planet) => planet.host_star.spectral_type),
+      luminosity_log_solar: luminosity,
+      luminosity_uncertainty:
+        members.find((planet) => planet.host_star.luminosity_log_solar === luminosity)
+          ?.uncertainties.star_luminosity ?? null,
     },
   };
 });
@@ -398,7 +447,8 @@ const report = {
       .map((s) => [s.hostname, s.planets_in_catalog, s.nasa_sy_pnum]),
     controversial_planets: count((planet) => planet.status.controversial),
     circumbinary_planets: count((planet) => planet.status.circumbinary),
-    candidates_not_published_confirmed: count(
+    confirmed_planets: count((planet) => planet.status.confirmed),
+    default_row_from_a_candidate_stage_solution: count(
       (planet) => planet.status.solution_type !== "Published Confirmed",
     ),
   },
@@ -453,7 +503,11 @@ const report = {
     density_calculated_from_radius_and_mass: count((p) => p.physical.density_calculated !== null),
   },
   outliers_kept: outliers,
-  problems: { ...problems, unknown_html_entities: [...unknownEntities] },
+  problems: {
+    ...problems,
+    unknown_html_entities: [...unknownEntities],
+    semi_major_axis_rows_rejected_by_kepler: rejectedDonors,
+  },
   column_descriptions: descriptions,
 };
 
@@ -523,7 +577,7 @@ writeFileSync(
   join(PROCESSED, "catalog_stats.json"),
   JSON.stringify({
     planets: planets.length,
-    confirmed: count((planet) => planet.status.solution_type === "Published Confirmed"),
+    confirmed: count((planet) => planet.status.confirmed),
     systems: systems.length,
     multiPlanetSystems: systems.filter((system) => system.planets_in_catalog > 1).length,
     systemsWithPosition: systems.filter(

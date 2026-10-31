@@ -36,7 +36,7 @@
   color: var(--soft);
   font-size: var(--text-small);
   cursor: pointer;
-  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  transition: border-color var(--dur-1) var(--ease-cinematic), color var(--dur-1) var(--ease-cinematic), background var(--dur-1) var(--ease-cinematic);
 }
 
 .chip:hover {
@@ -45,7 +45,6 @@
 }
 
 .chip[aria-pressed="true"] {
-  border-color: var(--white);
   background: rgba(255, 255, 255, 0.12);
   color: var(--white);
 }

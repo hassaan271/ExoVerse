@@ -3,8 +3,11 @@ import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/navigation/SiteHeader";
 import { PlanetDashboard } from "@/components/planet/PlanetDashboard";
 import {
+  getObservatoryId,
+  getPlanetHabitability,
   getPlanetRecord,
   getPlanetRecordsInSystem,
+  getSystemHabitability,
   getSystemRecord,
 } from "@/lib/catalog.server";
 
@@ -32,6 +35,9 @@ export default async function PlanetPage({ params }: PageProps) {
           planet={planet}
           system={getSystemRecord(planet.system_id)}
           siblings={getPlanetRecordsInSystem(planet.system_id)}
+          observatoryId={getObservatoryId(planet.discovery.facility)}
+          habitability={getPlanetHabitability(planet.id)}
+          systemHabitability={getSystemHabitability(planet.system_id)}
         />
       </main>
     </>

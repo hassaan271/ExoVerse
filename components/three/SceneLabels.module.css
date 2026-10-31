@@ -13,13 +13,13 @@
   padding: 0.05rem 0.4rem;
   border: 0;
   border-radius: var(--radius-s);
-  background: rgba(5, 5, 5, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   color: var(--soft);
   font-size: 0.8125rem;
   white-space: nowrap;
   pointer-events: none;
   will-change: transform;
-  transition: color 0.2s ease;
+  transition: color var(--dur-1) var(--ease-cinematic);
 }
 
 button.label {

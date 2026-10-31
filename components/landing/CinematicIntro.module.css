@@ -15,6 +15,18 @@
   object-fit: cover;
 }
 
+/* The scene fades up only once it can draw, so its load is never seen. */
+.scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+
+.page[data-ready="true"] .scene {
+  opacity: 1;
+}
+
 /* Readability only: darkens the copy's side, then the sky as the page scrolls. */
 .veil {
   position: absolute;
@@ -22,11 +34,11 @@
   background:
     linear-gradient(
       to right,
-      rgba(5, 5, 5, 0.72) 0%,
-      rgba(5, 5, 5, 0.3) 42%,
-      transparent 68%
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.28) 38%,
+      transparent 60%
     ),
-    rgba(5, 5, 5, calc(var(--landing-scroll) * 0.68));
+    rgba(0, 0, 0, calc(var(--landing-scroll) * 0.8));
   opacity: 0;
   pointer-events: none;
   transition: opacity 1.4s var(--ease-cinematic);
@@ -55,32 +67,27 @@
   right: 0;
   left: 0;
   color: var(--white);
-  font-size: clamp(1.75rem, 1.2rem + 2.6vw, 3.25rem);
-  font-weight: 400;
-  letter-spacing: 0.34em;
+  font-family: var(--type-display);
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  font-size: clamp(3rem, 2rem + 4vw, 6rem);
+  line-height: 1;
   text-align: center;
-  text-indent: 0.34em;
   opacity: 0;
-  animation: title-in 1.5s var(--ease-cinematic) 0.35s forwards;
-  transition: opacity 0.6s ease;
+  transform: scale(1.06);
+  /* Opacity and transform only, which stay smooth while the scene is busy. */
+  transition:
+    opacity 0.8s ease,
+    transform 1.6s var(--ease-cinematic);
   pointer-events: none;
 }
 
-.page:not([data-phase="intro"]) .title {
-  animation: none;
-  opacity: 0;
-}
-
-@keyframes title-in {
-  from {
-    opacity: 0;
-    letter-spacing: 0.6em;
-  }
-
-  to {
-    opacity: 1;
-    letter-spacing: 0.34em;
-  }
+.page[data-phase="intro"][data-ready="true"] .title {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 1.4s ease 0.4s,
+    transform 1.8s var(--ease-cinematic) 0.4s;
 }
 
 /* Appears only while the scene is genuinely still loading. */
@@ -118,14 +125,14 @@
   padding: 0.4rem 0.9rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
-  background: rgba(14, 14, 14, 0.45);
+  background: rgba(16, 16, 16, 0.45);
   color: var(--soft);
   font-size: var(--text-small);
   cursor: pointer;
   opacity: 0;
   backdrop-filter: blur(14px);
   animation: skip-in 0.5s ease 0.4s forwards;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  transition: color var(--dur-1) var(--ease-cinematic), border-color var(--dur-1) var(--ease-cinematic);
 }
 
 .skip:hover {
@@ -150,8 +157,8 @@
 @media (max-width: 760px) {
   .veil {
     background:
-      linear-gradient(to top, rgba(5, 5, 5, 0.82) 0%, rgba(5, 5, 5, 0.3) 60%, transparent 100%),
-      rgba(5, 5, 5, calc(var(--landing-scroll) * 0.68));
+      linear-gradient(to top, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.3) 60%, transparent 100%),
+      rgba(0, 0, 0, calc(var(--landing-scroll) * 0.68));
   }
 }
 

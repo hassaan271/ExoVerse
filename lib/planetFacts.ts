@@ -1,4 +1,4 @@
-import { formatValue, UNKNOWN } from "@/lib/format";
+import { formatDistance, formatValue, UNKNOWN } from "@/lib/format";
 import type { GapFill, PlanetRecord } from "@/types/planet";
 
 export type FactOrigin = "nasa" | "other-publication" | "calculated";
@@ -44,9 +44,25 @@ export function planetFactGroups(planet: PlanetRecord): FactGroup[] {
   const { density, density_calculated: calculatedDensity } = planet.physical;
   const massLabel = planet.physical.mass_provenance === "Mass" ? "Mass" : "Minimum mass";
 
+  const distance = formatDistance(
+    planet.location.distance_light_years,
+    planet.location.distance_parsecs,
+    planet.uncertainties.distance_parsecs,
+  );
+
   return [
     {
-      title: "Planet",
+      title: "Planet overview",
+      facts: [
+        text("Host star", planet.hostname),
+        { label: "Distance to host system", value: distance.value, origin: filled["location.distance"] ? "other-publication" : "nasa", fill: filled["location.distance"] },
+        ...(distance.detail ? [{ label: "In parsecs", value: distance.detail, origin: "nasa" as const }] : []),
+        text("Discovery year", planet.discovery.year),
+        text("Discovery method", planet.discovery.method),
+      ],
+    },
+    {
+      title: "Physical characteristics",
       facts: [
         fact("Radius", planet.physical.radius_earth, "× Earth", "physical.radius"),
         fact(massLabel, planet.physical.mass_earth, "× Earth", "physical.mass"),
@@ -59,19 +75,19 @@ export function planetFactGroups(planet: PlanetRecord): FactGroup[] {
             }
           : fact("Density", density, "g/cm³", "physical.density"),
         fact(
-          "Equilibrium temperature",
+          "Equilibrium temperature (estimated, not surface)",
           planet.climate.equilibrium_temperature_kelvin,
           "K",
           "climate.equilibrium_temperature",
         ),
-        fact("Insolation", planet.climate.insolation_earth, "× Earth", "climate.insolation"),
+        fact("Insolation flux", planet.climate.insolation_earth, "× Earth", "climate.insolation"),
       ],
     },
     {
-      title: "Orbit",
+      title: "Orbital characteristics",
       facts: [
         fact("Orbital period", planet.orbit.period_days, "days", "orbit.period"),
-        fact("Orbital distance", planet.orbit.semi_major_axis_au, "AU", "orbit.semi_major_axis"),
+        fact("Semi-major axis", planet.orbit.semi_major_axis_au, "AU", "orbit.semi_major_axis"),
         fact("Eccentricity", planet.orbit.eccentricity, "", "orbit.eccentricity"),
         fact("Inclination", planet.orbit.inclination_degrees, "°", "orbit.inclination"),
       ],
@@ -79,26 +95,19 @@ export function planetFactGroups(planet: PlanetRecord): FactGroup[] {
     {
       title: "Host star",
       facts: [
-        text("Name", planet.hostname),
         text("Spectral type", planet.host_star.spectral_type, "host_star.spectral_type"),
         fact("Temperature", planet.host_star.temperature_kelvin, "K", "host_star.temperature"),
         fact("Radius", planet.host_star.radius_solar, "× Sun", "host_star.radius"),
         fact("Mass", planet.host_star.mass_solar, "× Sun", "host_star.mass"),
-        fact("Distance from Earth", planet.location.distance_parsecs, "parsecs", "location.distance"),
-        {
-          label: "In light-years",
-          value: formatValue(planet.location.distance_light_years, "light-years"),
-          numeric: planet.location.distance_light_years !== null,
-          origin: planet.location.distance_light_years === null ? "nasa" : "calculated",
-        },
       ],
     },
     {
-      title: "Discovery",
+      title: "Discovery information",
       facts: [
-        text("Method", planet.discovery.method),
-        text("Year", planet.discovery.year),
         text("Facility", planet.discovery.facility),
+        text("Telescope", planet.discovery.telescope),
+        text("Instrument", planet.discovery.instrument),
+        text("Location", planet.discovery.locale),
       ],
     },
   ];

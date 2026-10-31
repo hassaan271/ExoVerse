@@ -1,8 +1,12 @@
 .stats {
+  --stat-size: clamp(2.125rem, 1.6rem + 2.4vw, 3.75rem);
+  --stat-font: var(--type-display);
+  --stat-label: var(--text-body);
   display: grid;
-  gap: var(--space-4);
-  margin: var(--space-6) var(--gutter) 0;
-  padding: var(--space-5) clamp(1.25rem, 3vw, 2.25rem);
+  gap: var(--space-5);
+  margin: 0 var(--gutter);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line-strong);
 }
 
 .source {

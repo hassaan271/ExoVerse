@@ -1,6 +1,6 @@
 "use client";
 
-import type { RefObject } from "react";
+import { type RefObject, useLayoutEffect } from "react";
 import styles from "./SceneLabels.module.css";
 import type { LabelSlot } from "./useScreenPicking";
 
@@ -26,7 +26,11 @@ export function SceneLabels({
   labels: SceneLabel[];
   slots: RefObject<LabelSlot[]>;
 }) {
-  slots.current.length = labels.length;
+  // After commit, not during render: a frame can run between the two, and a
+  // longer list would show it empty slots.
+  useLayoutEffect(() => {
+    slots.current.length = labels.length;
+  }, [labels.length, slots]);
 
   return (
     <div className={styles.layer}>

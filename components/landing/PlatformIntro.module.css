@@ -20,10 +20,14 @@
 
 .reasons {
   display: grid;
-  gap: var(--space-5);
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.reason {
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--line);
 }
 
 .name {
@@ -33,7 +37,7 @@
 .text {
   margin-top: var(--space-1);
   max-width: 34rem;
-  color: var(--soft);
+  color: var(--silver);
 }
 
 @media (max-width: 860px) {

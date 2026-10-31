@@ -1,0 +1,16 @@
+.page {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 48rem;
+  margin-inline: auto;
+  padding: var(--space-5) var(--gutter);
+}
+
+.title {
+  font-size: var(--text-h2);
+}
+
+.note {
+  color: var(--soft);
+  font-size: var(--text-small);
+}

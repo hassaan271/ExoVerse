@@ -1,6 +1,7 @@
 import { formatValue } from "@/lib/format";
 import type { SortKey } from "@/lib/filterPlanets";
 import type { PlanetSummary, SystemSummary } from "@/types/planet";
+import { LiquidIndicator } from "@/components/shared/LiquidIndicator";
 import styles from "./SystemList.module.css";
 
 const count = (total: number) => (total === 1 ? "1 planet" : `${total} planets`);
@@ -16,6 +17,7 @@ export function FeaturedSystemList({
 }) {
   return (
     <ul className={styles.list}>
+      <LiquidIndicator as="li" />
       {systems.map((system) => (
         <li key={system.id}>
           <button
@@ -55,6 +57,7 @@ export function PlanetList({
 }) {
   return (
     <ul className={styles.list}>
+      <LiquidIndicator as="li" />
       {planets.map((planet) => (
         <li key={planet.id}>
           <button

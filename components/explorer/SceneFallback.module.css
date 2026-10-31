@@ -13,3 +13,34 @@
   color: var(--soft);
   text-align: center;
 }
+
+.cover[role="status"] .message::after {
+  content: "";
+  display: block;
+  width: 7rem;
+  height: 1px;
+  margin: var(--space-3) auto 0;
+  background: linear-gradient(90deg, transparent, var(--silver), transparent) no-repeat;
+  background-size: 40% 100%;
+  animation: sweep 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes sweep {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 100% 0;
+  }
+}
+
+.cover[role="status"] {
+  z-index: 1;
+  transition: opacity 1.4s ease;
+}
+
+.cover[data-ready="true"] {
+  opacity: 0;
+  pointer-events: none;
+}

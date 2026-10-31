@@ -1,0 +1,129 @@
+.launcher {
+  position: fixed;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--white);
+  cursor: pointer;
+  transition: transform 0.5s var(--ease-liquid);
+}
+
+.launcher:hover {
+  transform: scale(1.07);
+}
+
+.launcher:active {
+  transform: scale(0.9, 0.86);
+  transition-duration: 0.1s;
+}
+
+.launcher:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+
+/* The intro's Skip button uses this corner. */
+:global(html:has([data-phase="intro"], [data-phase="arriving"])) .launcher,
+:global(html:has([data-phase="intro"], [data-phase="arriving"])) .popup {
+  display: none;
+}
+
+.popup {
+  position: fixed;
+  right: var(--space-4);
+  bottom: calc(var(--space-4) + 4.25rem);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: min(24rem, calc(100vw - var(--space-4) * 2));
+  height: min(34rem, calc(100svh - 9rem));
+  --glass-body: blur(26px) brightness(0.42) saturate(1.6);
+  padding: var(--space-4);
+  transform-origin: calc(100% - 1.75rem) calc(100% + 2.5rem);
+  transition:
+    opacity var(--dur-2) var(--ease-cinematic),
+    transform 0.6s var(--ease-liquid),
+    visibility 0.3s;
+}
+
+.popup[data-open="false"] {
+  visibility: hidden;
+  opacity: 0;
+  transform: scale(0.5);
+  transition-duration: var(--dur-2);
+}
+
+@starting-style {
+  .popup[data-open="true"] {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: 1.125rem;
+}
+
+.close {
+  padding: 0.15rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--soft);
+  font-size: var(--text-small);
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--white);
+}
+
+/* The popup is the surface here, so the panel drops its own. Doubled to outrank
+   the shared glass and panel styles, whichever loads last. */
+.panel.panel {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.note {
+  color: var(--soft);
+  font-size: 0.75rem;
+}
+
+/* Full screen on phones, where a floating panel leaves too little room. */
+@media (max-width: 640px) {
+  .popup {
+    inset: 0;
+    z-index: 41;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup,
+  .launcher {
+    transition: none;
+  }
+}

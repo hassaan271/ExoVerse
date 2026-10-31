@@ -21,6 +21,38 @@ and scroll parallax. Counts come from `data/processed/catalog_stats.json`, which
 `npm run catalog` generates. `public/Milky Way.mp4` is the untouched original
 video and is no longer used by the site.
 
+## Observatories
+
+`/observatories` is a schematic mission map. `data/observatories/directory.mjs`
+holds NASA's Observatories directory, and `scripts/build-observatories.mjs` joins
+it to the catalog: a planet belongs to an observatory only when its
+`disc_facility` names it, and the validator recounts every total from the raw
+CSV. Positions are illustrative, never live. Official models and their credits
+are in `public/models/observatories`; `lib/spacecraft/reconstructions.ts` holds
+artistic reconstructions for missions with no official model.
+
+## Habitability
+
+`lib/habitability.ts` holds the habitable-zone model (Kopparapu et al. 2014) and
+is shared by the build and the interface. `scripts/build-habitability.mjs` runs
+every planet through it once and writes `public/data/habitability.json`. This is
+a screen of orbit and starlight, not a detection of water, atmospheres or life,
+and there is deliberately no combined score. Run the tests with `npm test`.
+
+## AI Astronomer
+
+`/api/agent` runs the agent on the server through Featherless and the OpenAI
+SDK. Copy `.env.example` to `.env.local`, add `FEATHERLESS_API_KEY`, then run
+`npm run ai:check` to test the live connection.
+
+- `lib/ai/agent.ts` is the loop, limited to 5 tool rounds.
+- `lib/ai/tools.server.ts` holds the data tools, which call the existing catalog,
+  comparison and habitability code.
+- `lib/ai/actions.ts` is the allowlist of interface actions. The server validates
+  each one, the browser performs it and reports the result, and the agent resumes
+  from a signed continuation.
+- `lib/ai/appContext.ts` is how pages report their current selection.
+
 ## Planet rendering
 
 `lib/planet-visuals/visualProfile.ts` turns known facts into a preset and

@@ -20,15 +20,14 @@ export default function HomePage() {
       after={
         <>
           <main>
-            <section className={`glass ${styles.stats}`} aria-label="The catalog in numbers">
+            <section className={styles.stats} aria-label="The catalog in numbers">
               <CatalogStatsBar stats={stats} />
               <p className={styles.source}>
-                {stats.confirmed.toLocaleString("en-US")} published confirmed planets and{" "}
-                {(stats.planets - stats.confirmed).toLocaleString("en-US")} candidates, from the
-                NASA Exoplanet Archive.
+                {stats.confirmed.toLocaleString("en-US")} confirmed planets, from the NASA
+                Exoplanet Archive.
               </p>
             </section>
-            <FeaturedPlanets planets={getFeaturedPlanets()} />
+            <FeaturedPlanets planets={getFeaturedPlanets()} totalPlanets={stats.planets} />
             <PlatformIntro stats={stats} />
             <LandingCta />
           </main>

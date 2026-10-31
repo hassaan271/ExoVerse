@@ -12,6 +12,9 @@ import {
 import { getPlanetVisual } from "@/lib/planet-visuals/forPlanet";
 import type { PlanetSummary } from "@/types/planet";
 
+const ARRIVAL_SCALE = 0.92;
+const ARRIVAL_SECONDS = 1.4;
+
 interface ProceduralPlanetProps {
   /** Any catalog record. Appearance comes only from its data and name. */
   planet: PlanetSummary;
@@ -48,6 +51,7 @@ export const ProceduralPlanet = forwardRef<THREE.Group, ProceduralPlanetProps>(
     const gl = useThree((state) => state.gl);
     const holder = useRef<THREE.Group>(null);
     const object = useRef<PlanetObject | null>(null);
+    const arrival = useRef(1);
     const visual = useMemo(() => getPlanetVisual(planet), [planet]);
 
     useImperativeHandle(forwardedRef, () => holder.current as THREE.Group);
@@ -61,6 +65,9 @@ export const ProceduralPlanet = forwardRef<THREE.Group, ProceduralPlanetProps>(
       preparePlanetShaders(gl, visual).then(() => {
         if (!active) return;
         built = createPlanetObject(gl, visual, detail);
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        arrival.current = reduced ? 1 : 0;
+        if (!reduced) built.group.scale.setScalar(ARRIVAL_SCALE);
         group.add(built.group);
         object.current = built;
         onReady?.();
@@ -81,6 +88,12 @@ export const ProceduralPlanet = forwardRef<THREE.Group, ProceduralPlanetProps>(
     useFrame((_, delta) => {
       const current = object.current;
       if (!current) return;
+      // Eases to full size. The `scale` prop on the holder stays exact throughout.
+      if (arrival.current < 1) {
+        arrival.current = Math.min(arrival.current + Math.min(delta, 0.05) / ARRIVAL_SECONDS, 1);
+        const eased = arrival.current ** 2 * (3 - 2 * arrival.current);
+        current.group.scale.setScalar(ARRIVAL_SCALE + (1 - ARRIVAL_SCALE) * eased);
+      }
       current.update(paused ? 0 : delta);
       if (lightDirection) current.setLightDirection(lightDirection);
     });

@@ -43,7 +43,7 @@ export function StarField({
           ? 1
           : 0.6 + 0.4 * Math.sin(time * star.speed + star.phase);
         context.globalAlpha = star.alpha * twinkle;
-        context.fillStyle = "#e8ecf6";
+        context.fillStyle = "#ecebe6";
         context.beginPath();
         context.arc(star.x * width, star.y * height, star.radius, 0, Math.PI * 2);
         context.fill();

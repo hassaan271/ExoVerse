@@ -21,6 +21,11 @@ export interface GapFill {
   reference: Reference | null;
 }
 
+export interface Uncertainty {
+  upper: number | null;
+  lower: number | null;
+}
+
 export interface PlanetRecord {
   id: string;
   pl_name: string;
@@ -80,8 +85,23 @@ export interface PlanetRecord {
     locale: string | null;
     reference: Reference | null;
   };
+  /** NASA's two-sided uncertainties, from the same row as each value. */
+  uncertainties: Record<
+    | "radius_earth" | "mass_earth" | "equilibrium_temperature" | "insolation"
+    | "semi_major_axis" | "eccentricity" | "star_temperature" | "star_luminosity"
+    | "distance_parsecs",
+    Uncertainty | null
+  >;
+  /** Published spectra on record. A count, not a detection of anything. */
+  atmosphere: {
+    transmission_spectra: number;
+    eclipse_spectra: number;
+    direct_imaging_spectra: number;
+  };
   status: {
     solution_type: string | null;
+    /** True when any NASA row for this planet is Published Confirmed. */
+    confirmed: boolean;
     controversial: boolean;
     circumbinary: boolean;
   };
@@ -129,6 +149,8 @@ export interface SystemRecord {
     radius_solar: number | null;
     mass_solar: number | null;
     spectral_type: string | null;
+    luminosity_log_solar: number | null;
+    luminosity_uncertainty: Uncertainty | null;
   };
 }
 
@@ -178,7 +200,7 @@ export interface SystemSummary {
 
 export interface CatalogStats {
   planets: number;
-  /** Planets NASA lists as published confirmed. Absent in the browser index. */
+  /** Planets with a Published Confirmed row. Absent in the browser index. */
   confirmed?: number;
   systems: number;
   multiPlanetSystems: number;

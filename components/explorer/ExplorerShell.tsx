@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
 import { AnimatedNumber } from "@/components/shared/AnimatedNumber";
+import { LiquidIndicator } from "@/components/shared/LiquidIndicator";
 import { CatalogStatsBar } from "@/components/shared/CatalogStatsBar";
 import { DEFAULT_SYSTEM_ID, FEATURED_SYSTEM_IDS, useCatalog } from "@/lib/catalogIndex";
 import {
@@ -16,6 +17,8 @@ import {
 } from "@/lib/filterPlanets";
 import { formatValue } from "@/lib/format";
 import { hasPosition } from "@/lib/galaxyLayout";
+import { clearSelection, reportSelection } from "@/lib/ai/appContext";
+import { replaceUrl } from "@/lib/replaceUrl";
 import type { Catalog } from "@/types/planet";
 import { ExplorerFilters } from "./ExplorerFilters";
 import styles from "./ExplorerShell.module.css";
@@ -42,7 +45,9 @@ function Explorer({ catalog }: { catalog: Catalog }) {
   const deferredFilters = useDeferredValue(filters);
   const { planets, systems, systemById, methods, stats } = catalog;
 
-  const requested = searchParams.get("system");
+  // The router doesn't see replaceUrl, so the latest selection is held here.
+  const [picked, setPicked] = useState<string | null>(null);
+  const requested = picked ?? searchParams.get("system");
   const selected =
     (requested && systemById.get(requested)) || systemById.get(DEFAULT_SYSTEM_ID)!;
 
@@ -59,10 +64,16 @@ function Explorer({ catalog }: { catalog: Catalog }) {
 
   useEffect(() => setVisible(PAGE_SIZE), [deferredFilters, sort]);
 
+  useEffect(() => {
+    reportSelection({ systemId: selected.id });
+    return clearSelection;
+  }, [selected.id]);
+
   // The URL records the selection without a navigation, so the scene stays
   // mounted and the link can be shared.
   const selectSystem = useCallback((id: string) => {
-    window.history.replaceState(null, "", `/explore?system=${encodeURIComponent(id)}`);
+    replaceUrl(`/explore?system=${encodeURIComponent(id)}`);
+    setPicked(id);
     setMobileTab("system");
   }, []);
 
@@ -88,7 +99,8 @@ function Explorer({ catalog }: { catalog: Catalog }) {
         <CatalogStatsBar stats={stats} />
       </div>
 
-      <div className={styles.tabs} role="tablist" aria-label="Explorer panels">
+      <div className={`glass ${styles.tabs}`} role="tablist" aria-label="Explorer panels">
+        <LiquidIndicator />
         <button
           type="button"
           role="tab"

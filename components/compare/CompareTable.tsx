@@ -27,7 +27,7 @@ export function CompareTable({
   rows: ComparisonRow[];
 }) {
   return (
-    <div className={`glass ${styles.wrap}`}>
+    <div className={`plate ${styles.wrap}`}>
       <table className={styles.table}>
         <caption className="visually-hidden">
           Measurements of {a.name} and {b.name}, with the difference between them

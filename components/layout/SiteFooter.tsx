@@ -4,7 +4,7 @@ import styles from "./SiteFooter.module.css";
 export function SiteFooter() {
   return (
     <footer className={styles.footer}>
-      <p className={styles.brand}>EXOVERSE</p>
+      <p className={styles.brand}>ExoVerse</p>
       <p className={styles.attribution}>
         Planet data comes from the{" "}
         <a href="https://exoplanetarchive.ipac.caltech.edu/">

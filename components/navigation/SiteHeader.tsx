@@ -2,12 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LiquidIndicator } from "@/components/shared/LiquidIndicator";
+import { Mark } from "@/components/shared/Mark";
 import styles from "./SiteHeader.module.css";
 
 const LINKS = [
   { href: "/", label: "Home" },
   { href: "/explore", label: "Explore" },
   { href: "/compare", label: "Compare" },
+  { href: "/observatories", label: "Observatories" },
+  { href: "/habitability", label: "Habitability" },
   { href: "/about", label: "About" },
 ];
 
@@ -24,16 +28,14 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
   const pathname = usePathname();
 
   return (
-    <header className={overlay ? `glass ${styles.overlay}` : styles.header}>
+    <header className={`glass ${overlay ? styles.overlay : styles.header}`}>
       <Link href="/" className={styles.brand} aria-label="ExoVerse home">
-        <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
-          <circle cx="16" cy="16" r="11" fill="currentColor" />
-          <circle cx="20" cy="12.6" r="11" fill="var(--black)" />
-        </svg>
-        <span className={styles.wordmark}>EXOVERSE</span>
+        <Mark size={22} />
+        <span className={styles.wordmark}>ExoVerse</span>
       </Link>
       <nav aria-label="Main">
         <ul className={styles.links}>
+          <LiquidIndicator as="li" memory="site-nav" />
           {LINKS.map(({ href, label }) => (
             <li key={href}>
               <Link

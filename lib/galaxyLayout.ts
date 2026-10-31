@@ -375,6 +375,8 @@ export interface OrbitLayout {
 
 export interface SystemLayout {
   orbits: OrbitLayout[];
+  /** The same AU-to-scene conversion the orbits use, for anything drawn with them. */
+  drawDistance: (au: number) => number;
   starRadius: number;
   extent: number;
 }
@@ -444,6 +446,7 @@ export function systemLayouts(
     unitsPerEarthRadius: number,
     starRadius: number,
   ): SystemLayout => ({
+    drawDistance,
     extent: DISPLAY_EXTENT,
     starRadius,
     orbits: planets.map((planet, index) => {

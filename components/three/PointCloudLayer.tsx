@@ -53,13 +53,22 @@ export function PointCloudLayer({
   fade?: PointLayerUniforms;
 }) {
   const dpr = useThree((state) => state.viewport.dpr);
-  const uniforms = useMemo(
+  // Built through args: a `uniforms` prop is copied by value, which would cut
+  // the link to `fade` and leave the layer stuck at its first opacity.
+  const material = useMemo(
     () => ({
-      uScale: { value: scale * dpr },
-      uMaxSize: { value: maxSize * dpr },
-      uOpacity: fade?.uOpacity ?? { value: 1 },
+      vertexShader: VERTEX,
+      fragmentShader: FRAGMENT,
+      uniforms: {
+        uScale: { value: scale * dpr },
+        uMaxSize: { value: maxSize * dpr },
+        uOpacity: fade?.uOpacity ?? { value: 1 },
+      },
+      blending: dark ? THREE.NormalBlending : THREE.AdditiveBlending,
+      transparent: true,
+      depthWrite: false,
     }),
-    [scale, maxSize, dpr, fade],
+    [scale, maxSize, dpr, fade, dark],
   );
 
   return (
@@ -69,14 +78,7 @@ export function PointCloudLayer({
         <bufferAttribute attach="attributes-aColor" args={[cloud.colors, 3]} />
         <bufferAttribute attach="attributes-aSize" args={[cloud.sizes, 1]} />
       </bufferGeometry>
-      <shaderMaterial
-        vertexShader={VERTEX}
-        fragmentShader={FRAGMENT}
-        uniforms={uniforms}
-        blending={dark ? THREE.NormalBlending : THREE.AdditiveBlending}
-        transparent
-        depthWrite={false}
-      />
+      <shaderMaterial args={[material]} />
     </points>
   );
 }

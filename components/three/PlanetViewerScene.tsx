@@ -1,7 +1,7 @@
 "use client";
 
 import { useFrame, useThree } from "@react-three/fiber";
-import { type RefObject, useEffect, useMemo, useRef, useState } from "react";
+import { type RefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { ProceduralPlanet } from "@/components/3d/ProceduralPlanet";
 import { createSkyCloud } from "@/lib/galaxyLayout";
@@ -18,7 +18,7 @@ export interface ViewerControls {
 
 const FOV = 30;
 /** The planet fills this share of the view's shorter side. */
-const FILL = 0.72;
+const FILL = 0.82;
 const MAX_ZOOM_IN = 1.45;
 
 // Light stays over the viewer's shoulder, so dragging turns the planet under
@@ -30,9 +30,19 @@ interface WorldProps {
   paused: boolean;
   controlsRef: RefObject<ViewerControls | null>;
   onReady: () => void;
+  clearRight: number;
 }
 
-function ViewerWorld({ planet, paused, controlsRef, onReady }: WorldProps) {
+/** Less than half, so the planet's limb passes behind the glass and bends in it. */
+const PANEL_OVERLAP = 0.05;
+const STACKED_BELOW = 1080;
+/** How far above centre the planet sits while the page scrolls over it. */
+const STACKED_RAISE = 0.22;
+const ARRIVAL_DISTANCE = 1.5;
+const ARRIVAL_SECONDS = 2.2;
+const CAMERA_EASE = 5;
+
+function ViewerWorld({ planet, paused, controlsRef, onReady, clearRight }: WorldProps) {
   const camera = useThree((state) => state.camera);
   const size = useThree((state) => state.size);
   const [detail] = useState(() =>
@@ -49,6 +59,7 @@ function ViewerWorld({ planet, paused, controlsRef, onReady }: WorldProps) {
   });
 
   const flight = useRef<number | null>(null);
+  const arrival = useRef<"waiting" | number | null>(null);
   const home = useRef(false);
   const homePosition = useMemo(
     () => new THREE.Vector3(0, 0, homeDistance),
@@ -57,9 +68,43 @@ function ViewerWorld({ planet, paused, controlsRef, onReady }: WorldProps) {
 
   useEffect(() => {
     camera.position.copy(homePosition);
+    // Waits back here until the planet is ready, then glides in as the cover fades.
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      camera.position.multiplyScalar(ARRIVAL_DISTANCE);
+      arrival.current = "waiting";
+    }
     controls.update();
     // Framed for the current size; a resize re-frames the same way.
   }, [camera, controls, homePosition]);
+
+  // Slides the picture, not the planet, so dragging still turns it about its centre.
+  useEffect(() => {
+    const view = camera as THREE.PerspectiveCamera;
+    const stacked = size.width <= STACKED_BELOW;
+    view.setViewOffset(
+      size.width,
+      size.height,
+      stacked ? 0 : clearRight * PANEL_OVERLAP,
+      stacked ? size.height * STACKED_RAISE : 0,
+      size.width,
+      size.height,
+    );
+    return () => view.clearViewOffset();
+  }, [camera, clearRight, size.height, size.width]);
+
+  // Taking hold of the view ends the glide, so the visitor always wins.
+  useEffect(() => {
+    const stop = () => {
+      arrival.current = null;
+    };
+    controls.addEventListener("start", stop);
+    return () => controls.removeEventListener("start", stop);
+  }, [controls]);
+
+  const planetReady = useCallback(() => {
+    if (arrival.current === "waiting") arrival.current = 0;
+    onReady();
+  }, [onReady]);
 
   useEffect(() => {
     controlsRef.current = {
@@ -81,7 +126,15 @@ function ViewerWorld({ planet, paused, controlsRef, onReady }: WorldProps) {
   useFrame((_, delta) => {
     light.copy(LIGHT_FROM_VIEW).applyQuaternion(camera.quaternion);
 
-    const ease = 1 - Math.exp(-delta * 5);
+    if (typeof arrival.current === "number") {
+      arrival.current = Math.min(arrival.current + Math.min(delta, 0.1) / ARRIVAL_SECONDS, 1);
+      const t = arrival.current;
+      const eased = t * t * t * (t * (6 * t - 15) + 10);
+      camera.position.setLength(homeDistance * (ARRIVAL_DISTANCE + (1 - ARRIVAL_DISTANCE) * eased));
+      if (t === 1) arrival.current = null;
+    }
+
+    const ease = 1 - Math.exp(-Math.min(delta, 0.05) * CAMERA_EASE);
     if (flight.current !== null) {
       const next = THREE.MathUtils.lerp(camera.position.length(), flight.current, ease);
       camera.position.setLength(next);
@@ -104,7 +157,7 @@ function ViewerWorld({ planet, paused, controlsRef, onReady }: WorldProps) {
         detail={detail}
         paused={paused}
         lightDirection={light}
-        onReady={onReady}
+        onReady={planetReady}
       />
     </>
   );

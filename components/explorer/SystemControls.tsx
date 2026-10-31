@@ -4,6 +4,7 @@ import { type RefObject, useEffect, useState } from "react";
 import { Icon } from "@/components/shared/Icon";
 import type { SystemPlayback } from "@/components/three/SystemScene";
 import type { SystemViewMode } from "@/lib/galaxyLayout";
+import { LiquidIndicator } from "@/components/shared/LiquidIndicator";
 import styles from "./SystemControls.module.css";
 
 /** Playback multipliers. They scale time only, never the stored periods. */
@@ -58,6 +59,7 @@ export function SystemControls({
   return (
     <div className={`glass ${styles.controls}`}>
       <div className={styles.modes} role="group" aria-label="System scale">
+        <LiquidIndicator />
         <button type="button" aria-pressed={mode === "enhanced"} onClick={() => onModeChange("enhanced")}>
           Visibility Enhanced
         </button>

@@ -18,7 +18,7 @@
   text-align: left;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background var(--dur-1) var(--ease-cinematic);
 }
 
 .row:hover {

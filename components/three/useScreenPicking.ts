@@ -74,7 +74,9 @@ export function useScreenPicking({
         event.pointerType === "mouse" ? HIT_RADIUS_MOUSE_PX : HIT_RADIUS_TOUCH_PX;
 
       for (let index = 0; index < pickableCount; index += 1) {
-        projected.copy(points.current[index]).project(camera);
+        const point = points.current[index];
+        if (!point) continue;
+        projected.copy(point).project(camera);
         if (projected.z >= 1) continue;
         const x = ((projected.x + 1) / 2) * bounds.width;
         const y = ((1 - projected.y) / 2) * bounds.height;

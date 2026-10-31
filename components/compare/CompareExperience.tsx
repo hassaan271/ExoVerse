@@ -3,12 +3,15 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SceneLoading, SceneUnavailable } from "@/components/explorer/SceneFallback";
+import { clearSelection, reportSelection } from "@/lib/ai/appContext";
 import { useCatalog } from "@/lib/catalogIndex";
-import { comparePlanets, compareSizes, radiusLabel } from "@/lib/compare";
+import { comparePlanets, compareSizes, radiusLabel, scaleNote } from "@/lib/compare";
 import { EARTH, JUPITER, REFERENCE_SOURCE } from "@/lib/referenceBodies";
+import { replaceUrl } from "@/lib/replaceUrl";
 import type { Catalog, PlanetSummary } from "@/types/planet";
+import { LiquidIndicator } from "@/components/shared/LiquidIndicator";
 import styles from "./CompareExperience.module.css";
 import { CompareTable } from "./CompareTable";
 import { PlanetPicker } from "./PlanetPicker";
@@ -60,24 +63,25 @@ function Comparison({ catalog }: { catalog: Catalog }) {
   const syncUrl = (nextMode: Mode, a: PlanetSummary, b: PlanetSummary) => {
     const query = new URLSearchParams({ mode: nextMode, a: a.id });
     if (nextMode === "planets") query.set("b", b.id);
-    window.history.replaceState(null, "", `/compare?${query}`);
+    replaceUrl(`/compare?${query}`);
   };
+
+  useEffect(() => {
+    reportSelection({ planetId: planetA.referenceBody ? null : planetA.id, comparison: [planetA.id, right.id] });
+    return clearSelection;
+  }, [planetA, right]);
 
   const labelARef = useRef<HTMLDivElement>(null);
   const labelBRef = useRef<HTMLDivElement>(null);
   const labelA = radiusLabel(planetA);
   const labelB = radiusLabel(right);
-  const larger = (sizes.a ?? 0) >= (sizes.b ?? 0) ? planetA : right;
-  const ratio =
-    sizes.a !== null && sizes.b !== null
-      ? Math.max(sizes.a, sizes.b) / Math.min(sizes.a, sizes.b)
-      : 1;
 
   return (
     <div className={styles.page}>
       <header className={styles.heading}>
         <h1 className={styles.title}>Compare worlds</h1>
         <div className={styles.modes} role="group" aria-label="Comparison mode">
+          <LiquidIndicator />
           {MODES.map((option) => (
             <button
               key={option.value}
@@ -124,7 +128,7 @@ function Comparison({ catalog }: { catalog: Catalog }) {
       </div>
 
       <section className={styles.stage} aria-label={`3D comparison of ${planetA.name} and ${right.name}`}>
-        {!ready && <SceneLoading label="Rendering both planets" />}
+        <SceneLoading label="Rendering both planets" ready={ready} />
         <CompareScene
           a={planetA}
           b={right}
@@ -148,7 +152,7 @@ function Comparison({ catalog }: { catalog: Catalog }) {
                 {planetA.name}
               </Link>
             )}
-            <p>{planetA.referenceBody ? "Sun, reference body" : planetA.hostname}</p>
+            <p>{planetA.referenceBody ? "Solar System, reference body" : planetA.hostname}</p>
           </div>
           <div className={styles.nameRight}>
             {right.referenceBody ? (
@@ -158,7 +162,7 @@ function Comparison({ catalog }: { catalog: Catalog }) {
                 {right.name}
               </Link>
             )}
-            <p>{right.referenceBody ? "Sun, reference body" : right.hostname}</p>
+            <p>{right.referenceBody ? "Solar System, reference body" : right.hostname}</p>
           </div>
         </div>
         <div ref={labelARef} className={styles.sizeLabel}>
@@ -169,14 +173,9 @@ function Comparison({ catalog }: { catalog: Catalog }) {
           <strong>{labelB.size}</strong>
           <span>{labelB.detail}</span>
         </div>
-        <p className={styles.scale}>
-          {sizes.toScale
-            ? ratio > 1
-              ? `Same physical scale. ${larger.name} has ${ratio.toLocaleString("en-US", { maximumFractionDigits: 2 })} times the radius.`
-              : "Same physical scale. Both have the same radius."
-            : "NASA has no radius for a planet here, so it is not drawn. No size is implied."}
-        </p>
       </section>
+
+      <p className={styles.scale}>{scaleNote(planetA, right, sizes)}</p>
 
       <CompareTable a={planetA} b={right} rows={rows} />
 
@@ -191,6 +190,7 @@ function Comparison({ catalog }: { catalog: Catalog }) {
 
 export function CompareExperience() {
   const { catalog, failed, retry } = useCatalog();
+  const params = useSearchParams();
 
   if (failed) {
     return (
@@ -211,5 +211,6 @@ export function CompareExperience() {
     );
   }
 
-  return <Comparison catalog={catalog} />;
+  // A new link means new selections, which only apply when the view starts.
+  return <Comparison key={params.toString()} catalog={catalog} />;
 }

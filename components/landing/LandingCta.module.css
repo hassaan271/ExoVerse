@@ -1,11 +1,12 @@
 .cta {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: end;
   justify-content: space-between;
   gap: var(--space-5) var(--space-6);
-  margin: 0 var(--gutter) var(--section-gap);
-  padding: clamp(1.75rem, 4vw, 3rem);
+  margin: 0 var(--gutter);
+  padding-block: var(--space-6) var(--section-gap);
+  border-top: 1px solid var(--line-strong);
 }
 
 .title {
@@ -13,7 +14,7 @@
 }
 
 .text {
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
   color: var(--silver);
   font-size: var(--text-lead);
 }

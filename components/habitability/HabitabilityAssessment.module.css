@@ -1,0 +1,62 @@
+.section {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.title {
+  font-family: var(--type-text);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.zone {
+  justify-self: start;
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-small);
+}
+
+.zone[data-zone="conservative"] {
+  background: var(--white);
+  color: var(--black);
+}
+
+.zone[data-zone="optimistic"] {
+  border-color: var(--white);
+}
+
+.zone[data-zone="uncertain"],
+.zone[data-zone="insufficient"] {
+  border-style: dashed;
+}
+
+.explain {
+  color: var(--silver);
+  font-size: var(--text-small);
+}
+
+.facts {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-small);
+}
+
+.facts dt {
+  color: var(--soft);
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.note {
+  display: block;
+  color: var(--soft);
+  font-size: var(--text-small);
+}
+
+.note a {
+  text-decoration: underline;
+}

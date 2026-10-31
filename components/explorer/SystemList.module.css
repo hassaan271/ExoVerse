@@ -15,7 +15,7 @@
   background: none;
   text-align: left;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background var(--dur-1) var(--ease-cinematic);
 }
 
 .row:hover {
@@ -27,8 +27,7 @@
 }
 
 .name {
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
   line-height: 1.3;
   overflow-wrap: anywhere;
 }

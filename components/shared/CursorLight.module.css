@@ -1,0 +1,48 @@
+/* Faint on purpose: this is the light in the room, not a glowing circle. */
+.spot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.spot::after {
+  content: "";
+  position: absolute;
+  top: -17rem;
+  left: -17rem;
+  width: 34rem;
+  height: 34rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.055),
+    rgba(255, 255, 255, 0.018) 42%,
+    transparent 68%
+  );
+  opacity: 0;
+  transition:
+    opacity var(--dur-3) var(--ease-cinematic),
+    transform var(--dur-3) var(--ease-cinematic);
+}
+
+.spot[data-visible="true"]::after {
+  opacity: 1;
+}
+
+/* Over something clickable the light gathers slightly. */
+.spot[data-over="true"]::after {
+  transform: scale(0.78);
+  opacity: 1.4;
+  filter: brightness(1.5);
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .spot {
+    display: none;
+  }
+}

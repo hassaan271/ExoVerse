@@ -1,24 +1,34 @@
 :root {
   color-scheme: dark;
 
-  /* Strictly monochrome. Colour on screen comes only from starlight and planets. */
-  --black: #050505;
-  --charcoal: #0f0f0f;
-  --graphite: #1c1c1c;
+  /* Black and neutral greys only. Colour on screen comes from the universe. */
+  --black: #000;
+  --charcoal: #141414;
+  --graphite: #1f1f1f;
   --graphite-light: #6e6e6e;
-  --silver: #c4c4c4;
-  --soft: #a6a6a6;
-  --white: #f4f4f4;
-  --glass: rgba(255, 255, 255, 0.07);
-  --line: rgba(255, 255, 255, 0.11);
+  --silver: #c8c8c8;
+  --soft: #9a9a9a;
+  --white: #f5f5f5;
+  --glass: rgba(255, 255, 255, 0.08);
+  --line: rgba(255, 255, 255, 0.1);
   --line-strong: rgba(255, 255, 255, 0.26);
 
-  --gutter: clamp(1rem, 4vw, 3.5rem);
-  --ease-cinematic: cubic-bezier(0.22, 0.61, 0.2, 1);
+  /* Apple devices get San Francisco itself; everyone else gets its closest match. */
+  --type-text: -apple-system, BlinkMacSystemFont, var(--font-sans), system-ui, sans-serif;
+  --type-display: -apple-system, BlinkMacSystemFont, var(--font-display), system-ui, sans-serif;
 
-  --radius-s: 0.5rem;
-  --radius-m: 0.875rem;
-  --radius-l: 1.25rem;
+  --gutter: clamp(1rem, 4vw, 3.5rem);
+
+  /* One curve and three speeds for what fades, and a spring for what flows. */
+  --ease-cinematic: cubic-bezier(0.22, 0.61, 0.2, 1);
+  --ease-liquid: linear(0, 0.06 3%, 0.22 7%, 0.58 14%, 0.87 21%, 1.03 28%, 1.08 34%, 1.07 42%, 1.02 54%, 0.995 68%, 1);
+  --dur-1: 0.16s;
+  --dur-2: 0.28s;
+  --dur-3: 0.6s;
+
+  --radius-s: 0.625rem;
+  --radius-m: 1rem;
+  --radius-l: 1.625rem;
   --radius-pill: 999px;
 
   --space-1: 0.25rem;
@@ -28,16 +38,27 @@
   --space-5: 1.5rem;
   --space-6: 2.5rem;
 
-  --text-small: 0.875rem;
-  --text-body: 1rem;
-  --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
-  --text-h3: 1.5rem;
-  --text-h2: clamp(1.75rem, 1.45rem + 1.4vw, 2.625rem);
-  --text-h1: clamp(2.5rem, 1.9rem + 3.4vw, 4.75rem);
+  --text-small: 0.8125rem;
+  --text-body: 0.9375rem;
+  --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --text-h3: 1.375rem;
+  --text-h2: clamp(2rem, 1.6rem + 2vw, 3.5rem);
+  --text-h1: clamp(2.75rem, 2rem + 4.2vw, 5.75rem);
 
-  --section-gap: clamp(4rem, 9vw, 7.5rem);
+  --section-gap: clamp(5rem, 11vw, 10rem);
 
   --header-height: 4rem;
+  --panel-top: calc(var(--header-height) + var(--space-2));
+
+  /* What glass does to the scene behind it. Darkening keeps white text legible
+     over the brightest stars, and saturation lets their colour bleed through. */
+  --glass-body: blur(13px) brightness(0.68) saturate(1.8);
+  --glass-rim:
+    inset 1px 1px 0.5px -0.5px rgba(255, 255, 255, 0.5),
+    inset -1px -1px 0.5px -0.5px rgba(255, 255, 255, 0.2),
+    inset 0 0 1.25rem rgba(255, 255, 255, 0.05),
+    inset 0 0.125rem 1rem -0.5rem rgba(255, 255, 255, 0.28);
+  --stars: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640' fill='white'%3E%3Ccircle cx=%22331%22 cy=%22154%22 r=%221%22 opacity=%220.25%22/%3E%3Ccircle cx=%2274%22 cy=%22548%22 r=%220.5%22 opacity=%220.6%22/%3E%3Ccircle cx=%22596%22 cy=%2259%22 r=%220.5%22 opacity=%220.25%22/%3E%3Ccircle cx=%2288%22 cy=%22444%22 r=%221%22 opacity=%220.25%22/%3E%3Ccircle cx=%22246%22 cy=%2292%22 r=%221%22 opacity=%220.25%22/%3E%3Ccircle cx=%22579%22 cy=%22126%22 r=%220.5%22 opacity=%220.25%22/%3E%3Ccircle cx=%22590%22 cy=%22599%22 r=%221%22 opacity=%220.25%22/%3E%3Ccircle cx=%22226%22 cy=%2247%22 r=%220.5%22 opacity=%220.6%22/%3E%3Ccircle cx=%22429%22 cy=%22147%22 r=%220.5%22 opacity=%220.6%22/%3E%3Ccircle cx=%22573%22 cy=%22185%22 r=%220.5%22 opacity=%220.4%22/%3E%3Ccircle cx=%22381%22 cy=%2299%22 r=%220.5%22 opacity=%220.25%22/%3E%3Ccircle cx=%22633%22 cy=%22210%22 r=%221%22 opacity=%220.85%22/%3E%3Ccircle cx=%22321%22 cy=%22476%22 r=%221%22 opacity=%220.6%22/%3E%3Ccircle cx=%22306%22 cy=%22254%22 r=%220.5%22 opacity=%220.4%22/%3E%3Ccircle cx=%2283%22 cy=%22588%22 r=%220.7%22 opacity=%220.85%22/%3E%3Ccircle cx=%22351%22 cy=%22459%22 r=%220.7%22 opacity=%220.25%22/%3E%3Ccircle cx=%22120%22 cy=%22524%22 r=%221%22 opacity=%220.4%22/%3E%3Ccircle cx=%22350%22 cy=%22155%22 r=%221%22 opacity=%220.85%22/%3E%3Ccircle cx=%2240%22 cy=%2279%22 r=%220.7%22 opacity=%220.6%22/%3E%3Ccircle cx=%22358%22 cy=%22608%22 r=%221%22 opacity=%220.85%22/%3E%3Ccircle cx=%2270%22 cy=%2295%22 r=%220.7%22 opacity=%220.85%22/%3E%3Ccircle cx=%2266%22 cy=%2262%22 r=%220.7%22 opacity=%220.85%22/%3E%3Ccircle cx=%22291%22 cy=%22395%22 r=%220.7%22 opacity=%220.25%22/%3E%3Ccircle cx=%22472%22 cy=%22363%22 r=%220.5%22 opacity=%220.25%22/%3E%3Ccircle cx=%22505%22 cy=%2260%22 r=%220.5%22 opacity=%220.6%22/%3E%3Ccircle cx=%22132%22 cy=%22253%22 r=%221%22 opacity=%220.85%22/%3E%3Ccircle cx=%22508%22 cy=%2282%22 r=%220.5%22 opacity=%220.85%22/%3E%3Ccircle cx=%22411%22 cy=%22562%22 r=%220.7%22 opacity=%220.4%22/%3E%3Ccircle cx=%22440%22 cy=%22563%22 r=%220.7%22 opacity=%220.85%22/%3E%3Ccircle cx=%22367%22 cy=%22389%22 r=%220.5%22 opacity=%220.4%22/%3E%3Ccircle cx=%2284%22 cy=%22180%22 r=%220.5%22 opacity=%220.4%22/%3E%3Ccircle cx=%22238%22 cy=%2212%22 r=%221%22 opacity=%220.4%22/%3E%3Ccircle cx=%22269%22 cy=%22288%22 r=%220.5%22 opacity=%220.4%22/%3E%3Ccircle cx=%22429%22 cy=%22547%22 r=%220.7%22 opacity=%220.6%22/%3E%3Ccircle cx=%22128%22 cy=%22527%22 r=%220.5%22 opacity=%220.85%22/%3E%3Ccircle cx=%22572%22 cy=%22401%22 r=%221%22 opacity=%220.85%22/%3E%3Ccircle cx=%22403%22 cy=%22106%22 r=%221%22 opacity=%220.85%22/%3E%3Ccircle cx=%2263%22 cy=%22195%22 r=%220.5%22 opacity=%220.4%22/%3E%3Ccircle cx=%22451%22 cy=%22166%22 r=%220.5%22 opacity=%220.6%22/%3E%3Ccircle cx=%22615%22 cy=%2253%22 r=%220.5%22 opacity=%220.25%22/%3E%3Ccircle cx=%22580%22 cy=%22154%22 r=%220.5%22 opacity=%220.6%22/%3E%3Ccircle cx=%22628%22 cy=%2226%22 r=%220.5%22 opacity=%220.4%22/%3E%3Ccircle cx=%22628%22 cy=%22385%22 r=%220.5%22 opacity=%220.6%22/%3E%3Ccircle cx=%22355%22 cy=%22616%22 r=%220.7%22 opacity=%220.85%22/%3E%3Ccircle cx=%22125%22 cy=%22118%22 r=%221%22 opacity=%220.85%22/%3E%3Ccircle cx=%22491%22 cy=%22495%22 r=%220.7%22 opacity=%220.25%22/%3E%3Ccircle cx=%22147%22 cy=%22104%22 r=%220.7%22 opacity=%220.6%22/%3E%3Ccircle cx=%22490%22 cy=%22165%22 r=%220.5%22 opacity=%220.4%22/%3E%3Ccircle cx=%22540%22 cy=%22370%22 r=%220.5%22 opacity=%220.25%22/%3E%3Ccircle cx=%22540%22 cy=%22305%22 r=%220.5%22 opacity=%220.6%22/%3E%3Ccircle cx=%22530%22 cy=%22375%22 r=%220.5%22 opacity=%220.6%22/%3E%3Ccircle cx=%22228%22 cy=%22545%22 r=%220.7%22 opacity=%220.4%22/%3E%3Ccircle cx=%22627%22 cy=%22199%22 r=%220.5%22 opacity=%220.85%22/%3E%3Ccircle cx=%22232%22 cy=%22204%22 r=%221%22 opacity=%220.6%22/%3E%3Ccircle cx=%2229%22 cy=%2228%22 r=%220.7%22 opacity=%220.85%22/%3E%3Ccircle cx=%22265%22 cy=%22198%22 r=%220.7%22 opacity=%220.85%22/%3E%3Ccircle cx=%22357%22 cy=%22373%22 r=%220.5%22 opacity=%220.4%22/%3E%3Ccircle cx=%22104%22 cy=%22232%22 r=%221%22 opacity=%220.4%22/%3E%3Ccircle cx=%22345%22 cy=%22209%22 r=%221%22 opacity=%220.25%22/%3E%3Ccircle cx=%22490%22 cy=%22352%22 r=%220.5%22 opacity=%220.25%22/%3E%3Ccircle cx=%22397%22 cy=%22204%22 r=%221%22 opacity=%220.4%22/%3E%3Ccircle cx=%22444%22 cy=%22340%22 r=%220.5%22 opacity=%220.85%22/%3E%3Ccircle cx=%22474%22 cy=%22411%22 r=%220.5%22 opacity=%220.4%22/%3E%3Ccircle cx=%22174%22 cy=%22130%22 r=%220.5%22 opacity=%220.4%22/%3E%3Ccircle cx=%22604%22 cy=%22476%22 r=%220.5%22 opacity=%220.85%22/%3E%3Ccircle cx=%22358%22 cy=%22159%22 r=%220.5%22 opacity=%220.25%22/%3E%3Ccircle cx=%2214%22 cy=%22105%22 r=%220.5%22 opacity=%220.85%22/%3E%3Ccircle cx=%22199%22 cy=%22216%22 r=%220.5%22 opacity=%220.6%22/%3E%3Ccircle cx=%22217%22 cy=%22299%22 r=%220.5%22 opacity=%220.6%22/%3E%3Ccircle cx=%22265%22 cy=%22557%22 r=%221%22 opacity=%220.4%22/%3E%3C/svg%3E");
 }
 
 *,
@@ -46,19 +67,40 @@
   box-sizing: border-box;
 }
 
+* {
+  scrollbar-width: thin;
+}
+
 html {
   scroll-behavior: smooth;
+  scrollbar-color: rgba(255, 255, 255, 0.24) transparent;
   background: var(--black);
+}
+
+/* Pages without a 3D scene still need something for the glass to bend: a dim
+   grey world on the horizon and a field of stars, painted once and left still. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    var(--stars),
+    radial-gradient(circle at 96% -14%, rgba(255, 255, 255, 0.12) 0, rgba(255, 255, 255, 0.04) 33vmax, rgba(255, 255, 255, 0.3) 38vmax, rgba(255, 255, 255, 0.05) 38.25vmax, transparent 47vmax),
+    radial-gradient(circle at 96% -14%, transparent 53.8vmax, rgba(255, 255, 255, 0.16) 54vmax, transparent 54.2vmax),
+    radial-gradient(52vmax 40vmax at -6% 104%, rgba(255, 255, 255, 0.13), transparent 72%);
 }
 
 body {
   margin: 0;
   min-height: 100svh;
-  background: var(--black);
   color: var(--white);
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-size: 1rem;
+  font-family: var(--type-text);
+  font-size: var(--text-body);
   line-height: 1.55;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: -0.006em;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
@@ -67,10 +109,10 @@ h1,
 h2,
 h3 {
   margin: 0;
-  font-family: var(--font-sans), system-ui, sans-serif;
-  font-weight: 500;
-  letter-spacing: -0.022em;
-  line-height: 1.1;
+  font-family: var(--type-display);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.07;
   text-wrap: balance;
 }
 
@@ -89,8 +131,13 @@ select {
   color: inherit;
 }
 
+::selection {
+  background: var(--white);
+  color: var(--black);
+}
+
 :focus-visible {
-  outline: 2px solid var(--white);
+  outline: 1px solid var(--white);
   outline-offset: 3px;
 }
 
@@ -101,7 +148,7 @@ select {
   justify-content: center;
   gap: var(--space-2);
   min-height: 2.75rem;
-  padding: 0.5rem 1.25rem;
+  padding: 0.5rem 1.375rem;
   border: 1px solid transparent;
   border-radius: var(--radius-pill);
   background: none;
@@ -109,26 +156,43 @@ select {
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition:
+    background var(--dur-1) var(--ease-cinematic),
+    box-shadow var(--dur-2) var(--ease-cinematic),
+    color var(--dur-1) var(--ease-cinematic),
+    transform 0.5s var(--ease-liquid);
+}
+
+.button:hover {
+  transform: scale(1.025);
+}
+
+/* Pressed glass gives like a drop, wider than it is tall, then springs back. */
+.button:active {
+  transform: scale(0.97, 0.92);
+  transition-duration: var(--dur-1), var(--dur-1), var(--dur-1), 0.1s;
 }
 
 .button-primary {
-  background: var(--white);
+  background: linear-gradient(180deg, #fff, #d4d4d4);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 0.5rem 1.25rem -0.5rem rgba(0, 0, 0, 0.7);
   color: var(--black);
 }
 
 .button-primary:hover {
-  background: var(--silver);
+  background: linear-gradient(180deg, #fff, #e8e8e8);
 }
 
 .button-secondary {
-  border-color: var(--line-strong);
-  background: rgba(14, 14, 14, 0.45);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: var(--glass-rim);
+  backdrop-filter: var(--refract,) blur(8px) brightness(0.85) saturate(1.7);
 }
 
 .button-secondary:hover {
-  border-color: var(--white);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .icon-button {
@@ -138,11 +202,14 @@ select {
   height: 2.5rem;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-pill);
+  border-radius: 50%;
   background: none;
   color: var(--soft);
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background var(--dur-1) var(--ease-cinematic),
+    color var(--dur-1) var(--ease-cinematic),
+    transform 0.5s var(--ease-liquid);
 }
 
 .icon-button:hover {
@@ -150,29 +217,218 @@ select {
   color: var(--white);
 }
 
-.glass {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-l);
-  background: linear-gradient(160deg, rgba(38, 38, 38, 0.56), rgba(14, 14, 14, 0.62));
+.icon-button:active {
+  transform: scale(0.88);
+  transition-duration: var(--dur-1), var(--dur-1), 0.1s;
+}
+
+/* In a layer, so a component's own shape and position always win. */
+@layer base {
+  /* Liquid glass, for what floats. LiquidGlass supplies --refract, the curved rim
+     that bends the scene; without it this is still clear, frosted glass. */
+  .glass {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-l);
+    background:
+      linear-gradient(
+        165deg,
+        rgba(255, 255, 255, 0.16),
+        rgba(255, 255, 255, 0.04) 32%,
+        rgba(255, 255, 255, 0.02) 66%,
+        rgba(255, 255, 255, 0.08)
+      ),
+      rgba(16, 16, 16, 0.14);
+    box-shadow:
+      var(--glass-rim),
+      0 1.5rem 3.5rem -1.25rem rgba(0, 0, 0, 0.8);
+    backdrop-filter: var(--refract,) var(--glass-body);
+  }
+
+  /* The same glass, thicker and without the rim, for long reading. */
+  .plate {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-l);
+    background:
+      linear-gradient(165deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.025) 42%, rgba(255, 255, 255, 0.055)),
+      rgba(22, 22, 22, 0.3);
+    box-shadow:
+      inset 1px 1px 0.5px -0.5px rgba(255, 255, 255, 0.3),
+      inset -1px -1px 0.5px -0.5px rgba(255, 255, 255, 0.1),
+      0 1.25rem 3rem -1.5rem rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(24px) brightness(0.56) saturate(1.5);
+  }
+
+  /* A shallow dish cut into glass, for a figure or a group of controls. */
+  .well {
+    border-radius: var(--radius-m);
+    background: rgba(255, 255, 255, 0.055);
+    box-shadow:
+      inset 0 1px 2px rgba(0, 0, 0, 0.4),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .button-secondary {
+    position: relative;
+  }
+
+  [data-liquid] {
+    position: relative;
+    isolation: isolate;
+  }
+}
+
+:root[data-glass="frosted"] .glass,
+:root[data-glass="frosted"] .button-secondary {
+  --refract: ;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .plate {
+    background: var(--charcoal);
+    backdrop-filter: none;
+  }
+}
+
+/* CursorLight writes --lx and --ly on the one surface under the pointer. */
+.glass::before,
+.plate::before,
+.button-secondary::before,
+.glass::after,
+.plate::after,
+.button-secondary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(var(--light-scroll, 0));
+  transition: opacity var(--dur-3) var(--ease-cinematic);
+}
+
+.glass::before,
+.plate::before,
+.button-secondary::before {
+  background: radial-gradient(
+    340px circle at var(--lx, 50%) var(--ly, 50%),
+    rgba(255, 255, 255, 0.11),
+    transparent 70%
+  );
+}
+
+/* The same light caught by the rim: only the edge nearest the cursor shows. */
+.glass::after,
+.plate::after,
+.button-secondary::after {
+  padding: 1px;
+  background: radial-gradient(
+    240px circle at var(--lx, 50%) var(--ly, 50%),
+    rgba(255, 255, 255, 0.8),
+    transparent 75%
+  );
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+[data-lit="true"]::before,
+[data-lit="true"]::after {
+  opacity: 1;
+  transition-duration: var(--dur-2);
+}
+
+/* The active control in a group sits on a drop of glass. The edge it travels
+   towards leads and the other trails, which is what makes it read as liquid. */
+.liquid-drop {
+  --lead: 0.34s;
+  --trail: 0.6s;
+  position: absolute;
+  z-index: -1;
+  list-style: none;
+  border-radius: var(--drop-radius, var(--radius-pill));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.1));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 18px 50px rgba(0, 0, 0, 0.42);
-  backdrop-filter: blur(22px);
+    inset 1px 1px 0.5px -0.5px rgba(255, 255, 255, 0.65),
+    inset -1px -1px 0.5px -0.5px rgba(255, 255, 255, 0.25),
+    0 0.25rem 0.75rem -0.25rem rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    left var(--lead) var(--ease-liquid),
+    right var(--lead) var(--ease-liquid),
+    top var(--lead) var(--ease-liquid),
+    bottom var(--lead) var(--ease-liquid),
+    opacity var(--dur-2) var(--ease-cinematic);
+}
+
+.liquid-drop[data-on="true"] {
+  opacity: 1;
+}
+
+.liquid-drop[data-x="forward"] {
+  --left: var(--trail);
+}
+
+.liquid-drop[data-x="back"] {
+  --right: var(--trail);
+}
+
+.liquid-drop[data-y="forward"] {
+  --top: var(--trail);
+}
+
+.liquid-drop[data-y="back"] {
+  --bottom: var(--trail);
+}
+
+.liquid-drop[data-x],
+.liquid-drop[data-y] {
+  transition-duration:
+    var(--left, var(--lead)),
+    var(--right, var(--lead)),
+    var(--top, var(--lead)),
+    var(--bottom, var(--lead)),
+    var(--dur-2);
+}
+
+/* The drop replaces each control's own selected background. */
+[data-liquid="ready"] [aria-pressed="true"],
+[data-liquid="ready"] [aria-selected="true"] {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+ul[data-liquid] {
+  --drop-radius: var(--radius-m);
 }
 
 .field {
   width: 100%;
-  min-height: 2.75rem;
+  min-height: 2.625rem;
   padding: 0.5rem 0.875rem;
-  border: 1px solid var(--line);
+  border: 1px solid transparent;
   border-radius: var(--radius-m);
-  background: rgba(5, 5, 5, 0.45);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
   font-size: var(--text-body);
-  transition: border-color 0.2s ease;
+  transition:
+    background var(--dur-1) var(--ease-cinematic),
+    border-color var(--dur-1) var(--ease-cinematic);
 }
 
 .field:hover {
-  border-color: var(--line-strong);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.field:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
 }
 
 .field::placeholder {
@@ -204,5 +460,64 @@ select {
     animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
+  }
+}
+
+/* A route change crossfades, on top of the page's own black background. */
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.7s;
+  animation-timing-function: ease-in-out;
+}
+
+/* Details open and close rather than snapping. */
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  details::details-content {
+    overflow: hidden;
+    height: 0;
+    transition:
+      height var(--dur-2) var(--ease-cinematic),
+      content-visibility var(--dur-2) allow-discrete;
+  }
+
+  details[open]::details-content {
+    height: auto;
+  }
+}
+
+.fade-in {
+  animation: fade-in var(--dur-2) var(--ease-cinematic);
+}
+
+/* Glass condenses into place. Only ever on the glass itself: fading a parent
+   would cut the glass off from what's behind it until the fade ended. */
+.liquid-in {
+  animation:
+    fade-in var(--dur-3) var(--ease-cinematic) backwards,
+    condense 0.8s var(--ease-liquid) backwards;
+}
+
+@keyframes condense {
+  from {
+    transform: scale(0.94);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

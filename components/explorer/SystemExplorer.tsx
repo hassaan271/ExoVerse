@@ -2,11 +2,15 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { HabitabilityAssessment } from "@/components/habitability/HabitabilityAssessment";
+import { HabitableZoneLegend } from "@/components/habitability/HabitableZoneLegend";
 import { PlanetInfoPanel } from "@/components/planet/PlanetInfoPanel";
 import { Icon } from "@/components/shared/Icon";
 import { formatValue } from "@/lib/format";
+import { clearSelection, reportSelection, SYSTEM_COMMAND, type SystemCommand } from "@/lib/ai/appContext";
 import { type SystemViewMode, systemLayouts } from "@/lib/galaxyLayout";
+import type { HabitabilityPlanet, HabitabilitySystem } from "@/lib/habitability";
 import { toPlanetSummary } from "@/lib/planetSummary";
 import type { PlanetRecord, SystemRecord } from "@/types/planet";
 import type { SystemPlayback } from "@/components/three/SystemScene";
@@ -22,14 +26,45 @@ const SystemScene = dynamic(() => import("@/components/three/SystemScene"), {
 export function SystemExplorer({
   system,
   planets,
+  habitability,
+  planetHabitability,
+  initialPlanetId,
 }: {
   system: SystemRecord;
   planets: PlanetRecord[];
+  habitability: HabitabilitySystem | null;
+  planetHabitability: HabitabilityPlanet[];
+  initialPlanetId?: string;
 }) {
-  const [selectedId, setSelectedId] = useState(planets[0].id);
+  const [selectedId, setSelectedId] = useState(
+    planets.some((planet) => planet.id === initialPlanetId) ? (initialPlanetId as string) : planets[0].id,
+  );
   const [ready, setReady] = useState(false);
+  const [showZone, setShowZone] = useState(true);
   const playback = useRef<SystemPlayback>({ zoom: 0, speed: 1, paused: false });
   const onReady = useCallback(() => setReady(true), []);
+
+  useEffect(() => {
+    reportSelection({ planetId: selectedId, systemId: system.id });
+    return clearSelection;
+  }, [selectedId, system.id]);
+
+  useEffect(() => {
+    const onCommand = (event: Event) => {
+      const command = (event as CustomEvent<SystemCommand>).detail;
+      if (command.systemId !== system.id) return;
+      if (command.planetId && planets.some((planet) => planet.id === command.planetId)) {
+        setSelectedId(command.planetId);
+      }
+      if (command.zoomOut) {
+        playback.current.zoom = 0;
+        playback.current.onZoomChange?.(0);
+      }
+      command.handled = true;
+    };
+    window.addEventListener(SYSTEM_COMMAND, onCommand);
+    return () => window.removeEventListener(SYSTEM_COMMAND, onCommand);
+  }, [planets, system.id]);
   const selectedIndex = Math.max(planets.findIndex((p) => p.id === selectedId), 0);
   const selected = planets[selectedIndex];
   const summaries = useMemo(() => planets.map(toPlanetSummary), [planets]);
@@ -55,6 +90,8 @@ export function SystemExplorer({
   const layout = layouts[mode];
   const orbit = layout.orbits[selectedIndex];
   const distance = system.location.distance_light_years;
+  const zone = habitability?.zone ?? null;
+  const selectedHabitability = planetHabitability.find((planet) => planet.id === selected.id);
 
   const orbitNote = [
     orbit.distanceSource === "kepler" &&
@@ -70,8 +107,10 @@ export function SystemExplorer({
   return (
     <div className={styles.shell}>
       <section className={styles.scene} aria-label={`${system.hostname} system view`}>
-        {!ready && <SceneLoading label={`Loading ${system.hostname}`} />}
+        <SceneLoading label={`Loading ${system.hostname}`} ready={ready} />
         <SystemScene
+          zone={showZone ? zone : null}
+          indicative={habitability?.indicative ?? false}
           system={system}
           planets={planets}
           layout={layout}
@@ -88,6 +127,14 @@ export function SystemExplorer({
           }
         />
       </section>
+
+      <HabitableZoneLegend
+        system={habitability}
+        layout={layout}
+        compressed={mode === "enhanced"}
+        visible={showZone}
+        onToggle={() => setShowZone((value) => !value)}
+      />
 
       <div className={styles.toolbar}>
         <SystemControls
@@ -122,6 +169,14 @@ export function SystemExplorer({
 
       <aside className={`glass ${styles.preview}`} aria-label="Selected planet">
         <PlanetInfoPanel key={selected.id} planet={selected} />
+        {selectedHabitability && (
+          <HabitabilityAssessment
+            key={`hz-${selected.id}`}
+            planet={selectedHabitability}
+            system={habitability}
+            compact
+          />
+        )}
         {orbitNote.length > 0 && <p className={styles.note}>{orbitNote.join(" ")}</p>}
         <Link href={`/planets/${selected.id}`} className="button button-primary">
           View planet

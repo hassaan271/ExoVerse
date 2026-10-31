@@ -1,11 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
-import type { ReactNode } from "react";
+import { Inter, Inter_Tight } from "next/font/google";
+import { type ReactNode, ViewTransition } from "react";
+import { ChatLauncher } from "@/components/ai/ChatLauncher";
+import { CursorLight } from "@/components/shared/CursorLight";
+import { LiquidGlass } from "@/components/shared/LiquidGlass";
 import "./globals.css";
 
-const sans = Geist({
+const sans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const display = Inter_Tight({
+  subsets: ["latin"],
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -16,13 +25,18 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050505",
+  themeColor: "#000000",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={sans.variable} data-scroll-behavior="smooth">
-      <body>{children}</body>
+    <html lang="en" className={`${sans.variable} ${display.variable}`} data-scroll-behavior="smooth">
+      <body>
+        <ViewTransition>{children}</ViewTransition>
+        <ChatLauncher />
+        <CursorLight />
+        <LiquidGlass />
+      </body>
     </html>
   );
 }

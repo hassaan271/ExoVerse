@@ -25,8 +25,8 @@ const LandingScene = dynamic(() => import("@/components/three/LandingScene"), {
  */
 export type IntroPhase = "intro" | "arriving" | "arrived";
 
-/** If the scene isn't ready by now, the page shouldn't wait for it. */
-const READY_TIMEOUT_MS = 3500;
+/** Long enough for a first-visit shader compile on a modest GPU. */
+const READY_TIMEOUT_MS = 12000;
 
 const IntroPhaseContext = createContext<IntroPhase>("arrived");
 export const useIntroPhase = () => useContext(IntroPhaseContext);
@@ -106,29 +106,31 @@ export function CinematicIntro({ fallbackSrc, children, after }: CinematicIntroP
         <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
       </noscript>
 
-      <div ref={stage} className={styles.page} data-phase={phase}>
+      <div ref={stage} className={styles.page} data-phase={phase} data-ready={ready}>
         <div className={styles.backdrop} aria-hidden="true">
           {unavailable && (
             <Image src={fallbackSrc} alt="" fill sizes="100vw" className={styles.still} />
           )}
           {motion !== null && (
-            <LandingScene
-              playIntro={playIntro && motion}
-              motion={motion}
-              control={control}
-              stage={stage}
-              onReady={onReady}
-              onReveal={onReveal}
-              onFinished={finish}
-              fallback={<WhenUnavailable onUnavailable={onUnavailable} />}
-            />
+            <div className={styles.scene}>
+              <LandingScene
+                playIntro={playIntro && motion}
+                motion={motion}
+                control={control}
+                stage={stage}
+                onReady={onReady}
+                onReveal={onReveal}
+                onFinished={finish}
+                fallback={<WhenUnavailable onUnavailable={onUnavailable} />}
+              />
+            </div>
           )}
           <div className={styles.veil} />
         </div>
 
         <section className={styles.stage}>
           <div className={styles.title} aria-hidden="true">
-            EXOVERSE
+            ExoVerse
           </div>
 
           <div className={styles.content} inert={phase === "intro"}>

@@ -20,10 +20,7 @@ export function HeroSection() {
         <SiteHeader overlay />
       </div>
 
-      <div className={styles.copy}>
-        <p data-reveal className={styles.brand}>
-          EXOVERSE
-        </p>
+      <div className={styles.copy} data-depth>
         <h1 data-reveal className={`${styles.heading} ${styles.reveal}`} style={delay(0.15)}>
           Explore Worlds Beyond Our Solar System.
         </h1>

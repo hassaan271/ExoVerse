@@ -5,6 +5,7 @@ import { type RefObject, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { ProceduralPlanet } from "@/components/3d/ProceduralPlanet";
 import { createSkyCloud, eccentricAnomaly, type SystemLayout } from "@/lib/galaxyLayout";
+import type { HzBoundaries } from "@/lib/habitability";
 import { SYSTEM_DETAIL } from "@/lib/planet-visuals/createPlanetObject";
 import { starColor } from "@/lib/planet-visuals/visualProfile";
 import { toPlanetSummary } from "@/lib/planetSummary";
@@ -73,7 +74,58 @@ const MARKER_SIZE = 0.009;
 /** Close up, light eases to over the shoulder so the surface can be seen. */
 const CLOSE_UP_LIGHT = new THREE.Vector3(-0.72, 0.42, 0.55).normalize();
 
+/** One star's zone, in the same scale as its orbits. Never moves a planet. */
+function HabitableZoneBands({
+  zone,
+  layout,
+  indicative,
+  line,
+}: {
+  zone: HzBoundaries;
+  layout: SystemLayout;
+  indicative: boolean;
+  line: THREE.BufferGeometry;
+}) {
+  const radii = [
+    zone.optimisticInner, zone.conservativeInner, zone.conservativeOuter, zone.optimisticOuter,
+  ].map(layout.drawDistance);
+  const strength = indicative ? 0.5 : 1;
+  const bands = [
+    { from: radii[0], to: radii[1], color: "#e0a94f", opacity: 0.12 },
+    { from: radii[1], to: radii[2], color: "#3fc98a", opacity: 0.2 },
+    { from: radii[2], to: radii[3], color: "#e0a94f", opacity: 0.12 },
+  ];
+  return (
+    <group renderOrder={-1}>
+      {bands.map((band) => (
+        <mesh key={band.color + band.from} rotation={[-Math.PI / 2, 0, 0]}>
+          <ringGeometry args={[band.from, band.to, 160]} />
+          <meshBasicMaterial
+            color={band.color}
+            transparent
+            opacity={band.opacity * strength}
+            side={THREE.DoubleSide}
+            depthWrite={false}
+          />
+        </mesh>
+      ))}
+      {radii.map((radius, index) => (
+        <lineLoop key={index} geometry={line} scale={[radius, 1, radius]}>
+          <lineBasicMaterial
+            color={index === 1 || index === 2 ? "#6fe0ad" : "#e6bd75"}
+            transparent
+            opacity={0.5 * strength}
+            depthWrite={false}
+          />
+        </lineLoop>
+      ))}
+    </group>
+  );
+}
+
 interface WorldProps {
+  zone: HzBoundaries | null;
+  indicative: boolean;
   system: SystemRecord;
   planets: PlanetRecord[];
   layout: SystemLayout;
@@ -86,6 +138,8 @@ interface WorldProps {
 }
 
 function SystemWorld({
+  zone,
+  indicative,
   system,
   planets,
   layout,
@@ -339,6 +393,10 @@ function SystemWorld({
         />
       </sprite>
 
+      {zone && (
+        <HabitableZoneBands zone={zone} layout={layout} indicative={indicative} line={solid} />
+      )}
+
       {orbits.map((orbit, index) => {
         const offset = orbit.semiMajorAxis * orbit.eccentricity;
         const isSelected = index === selectedIndex;
@@ -409,6 +467,9 @@ function SystemWorld({
 }
 
 interface SystemSceneProps {
+  /** Null hides the bands: no data, or the visitor turned them off. */
+  zone: HzBoundaries | null;
+  indicative: boolean;
   system: SystemRecord;
   planets: PlanetRecord[];
   layout: SystemLayout;
@@ -424,6 +485,8 @@ const CANVAS_DPR: [number, number] = [1, 1.75];
 const CANVAS_CAMERA = { fov: 40, near: 0.05, far: 3000, position: [0, 18, 24] } as const;
 
 export default function SystemScene({
+  zone,
+  indicative,
   system,
   planets,
   layout,
@@ -467,6 +530,8 @@ export default function SystemScene({
         camera={CANVAS_CAMERA}
       >
         <SystemWorld
+          zone={zone}
+          indicative={indicative}
           system={system}
           planets={planets}
           layout={layout}

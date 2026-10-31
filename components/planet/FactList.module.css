@@ -12,7 +12,7 @@
 }
 
 .fact dt {
-  flex: none;
+  flex: 0 1 45%;
   color: var(--soft);
 }
 

@@ -15,7 +15,8 @@ const PlanetViewerScene = dynamic(
   { ssr: false },
 );
 
-export function PlanetViewer({ planet }: { planet: PlanetSummary }) {
+/** `clearRight` is the width of a side panel, which the planet shifts away from. */
+export function PlanetViewer({ planet, clearRight = 0 }: { planet: PlanetSummary; clearRight?: number }) {
   const controls = useRef<ViewerControls | null>(null);
   const [ready, setReady] = useState(false);
   const [paused, setPaused] = useState(false);
@@ -23,11 +24,12 @@ export function PlanetViewer({ planet }: { planet: PlanetSummary }) {
 
   return (
     <section className={styles.viewer} aria-label={`3D view of ${planet.name}`}>
-      {!ready && <SceneLoading label={`Rendering ${planet.name}`} />}
+      <SceneLoading label={`Rendering ${planet.name}`} ready={ready} />
       <PlanetViewerScene
         planet={planet}
         paused={paused}
         controlsRef={controls}
+        clearRight={clearRight}
         onReady={onReady}
         fallback={
           <SceneUnavailable>

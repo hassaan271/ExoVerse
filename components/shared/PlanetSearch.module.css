@@ -3,9 +3,9 @@
   max-width: 30rem;
   border: 1px solid var(--line-strong);
   border-radius: 999px;
-  background: rgba(14, 14, 14, 0.5);
+  background: rgba(16, 16, 16, 0.5);
   backdrop-filter: blur(14px);
-  transition: border-color 0.2s ease;
+  transition: border-color var(--dur-1) var(--ease-cinematic);
 }
 
 .search:focus-within {

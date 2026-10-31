@@ -6,6 +6,7 @@ import type { GalaxyControls } from "@/components/three/GalaxyScene";
 import type { GalaxyViewMode } from "@/lib/galaxyLayout";
 import type { SystemSummary } from "@/types/planet";
 import { SceneLoading, SceneUnavailable } from "./SceneFallback";
+import { LiquidIndicator } from "@/components/shared/LiquidIndicator";
 import styles from "./GalaxyViewport.module.css";
 import { SceneToolbar } from "./SceneToolbar";
 
@@ -40,7 +41,7 @@ export function GalaxyViewport({
 
   return (
     <section className={styles.viewport} aria-label="Galaxy view">
-      {!ready && <SceneLoading label="Loading the galaxy" />}
+      <SceneLoading label="Loading the galaxy" ready={ready} />
       <GalaxyScene
         systems={systems}
         selectedId={selectedId}
@@ -68,6 +69,7 @@ export function GalaxyViewport({
           onReset={() => controls.current?.reset()}
         >
           <div className={styles.modes} role="group" aria-label="Map scale">
+            <LiquidIndicator />
             <button type="button" aria-pressed={mode === "galaxy"} onClick={() => setMode("galaxy")}>
               True scale
             </button>

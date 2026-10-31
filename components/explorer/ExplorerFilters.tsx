@@ -8,6 +8,7 @@ import {
   type SortKey,
   TEMPERATURE_OPTIONS,
 } from "@/lib/filterPlanets";
+import { LiquidIndicator } from "@/components/shared/LiquidIndicator";
 import styles from "./ExplorerFilters.module.css";
 
 interface ExplorerFiltersProps {
@@ -52,6 +53,7 @@ export function ExplorerFilters({
       </label>
 
       <div className={styles.categories} role="group" aria-label="Size class">
+        <LiquidIndicator />
         {SIZE_CLASSES.map((sizeClass) => (
           <button
             key={sizeClass}

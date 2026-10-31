@@ -1,0 +1,133 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  height: min(36rem, calc(100svh - 16rem));
+  min-height: 22rem;
+  padding: var(--space-4);
+}
+
+.log {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.empty,
+.status {
+  color: var(--soft);
+}
+
+.message {
+  max-width: 80%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.message[data-role="user"] {
+  align-self: flex-end;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-m);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.error {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+  color: var(--silver);
+}
+
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.form input {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.form button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.intro {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.suggestions {
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+
+.suggestion {
+  padding: 0.6rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--silver);
+  font-size: var(--text-body);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color var(--dur-1) var(--ease-cinematic),
+    padding-left var(--dur-2) var(--ease-cinematic);
+}
+
+.suggestion:hover {
+  padding-left: var(--space-2);
+  color: var(--white);
+}
+
+.entry {
+  display: grid;
+  gap: var(--space-1);
+  justify-items: start;
+}
+
+.entry[data-role="user"] {
+  justify-items: end;
+}
+
+.action {
+  color: var(--soft);
+  font-size: var(--text-small);
+}
+
+.action[data-ok="false"] {
+  color: var(--white);
+}
+
+.reference {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.entry,
+.error {
+  animation: appear var(--dur-2) var(--ease-cinematic);
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.status {
+  animation: breathe 1.8s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  50% {
+    opacity: 0.5;
+  }
+}

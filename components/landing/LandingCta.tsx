@@ -3,7 +3,7 @@ import styles from "./LandingCta.module.css";
 
 export function LandingCta() {
   return (
-    <section className={`glass ${styles.cta}`} aria-labelledby="cta-title">
+    <section className={styles.cta} aria-labelledby="cta-title">
       <div>
         <h2 id="cta-title" className={styles.title}>
           Choose a world and go

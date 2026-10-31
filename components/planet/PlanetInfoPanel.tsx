@@ -6,7 +6,7 @@ import styles from "./PlanetInfoPanel.module.css";
 /** The compact panel. It fills itself from any catalog record. */
 export function PlanetInfoPanel({ planet }: { planet: PlanetRecord }) {
   return (
-    <article className={styles.panel} aria-labelledby={`${planet.id}-title`}>
+    <article className={`fade-in ${styles.panel}`} aria-labelledby={`${planet.id}-title`}>
       <header>
         <h2 id={`${planet.id}-title`} className={styles.name}>
           {planet.pl_name}
