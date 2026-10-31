@@ -44,8 +44,10 @@
   gap: var(--space-2);
   width: min(24rem, calc(100vw - var(--space-4) * 2));
   height: min(34rem, calc(100svh - 9rem));
-  --glass-body: blur(26px) brightness(0.42) saturate(1.6);
+  /* Long reading over any scene, so this is the darkest glass on the site. */
+  --glass-body: blur(30px) brightness(0.3) saturate(1.5);
   padding: var(--space-4);
+  background: rgba(10, 10, 10, 0.62);
   transform-origin: calc(100% - 1.75rem) calc(100% + 2.5rem);
   transition:
     opacity var(--dur-2) var(--ease-cinematic),
